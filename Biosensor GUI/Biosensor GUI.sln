@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biosensor GUI", "Biosensor GUI\Biosensor GUI.csproj", "{CAF001D6-FED1-41A5-9FCC-93DE4C8157FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAF001D6-FED1-41A5-9FCC-93DE4C8157FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAF001D6-FED1-41A5-9FCC-93DE4C8157FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAF001D6-FED1-41A5-9FCC-93DE4C8157FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAF001D6-FED1-41A5-9FCC-93DE4C8157FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DFF5C937-A642-4929-8BC2-B720C0D0CF1A}
+	EndGlobalSection
+EndGlobal
