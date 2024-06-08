@@ -30,9 +30,11 @@
         {
             StartBtn = new Button();
             dataPlot = new ScottPlot.WinForms.FormsPlot();
-            button2 = new Button();
+            StopBtn = new Button();
             textBoxLog = new TextBox();
             pictureBox1 = new PictureBox();
+            comSelectBox = new ComboBox();
+            refreshBtn = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -55,15 +57,17 @@
             dataPlot.Size = new Size(740, 491);
             dataPlot.TabIndex = 1;
             // 
-            // button2
+            // StopBtn
             // 
-            button2.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button2.Location = new Point(877, 243);
-            button2.Name = "button2";
-            button2.Size = new Size(87, 43);
-            button2.TabIndex = 2;
-            button2.Text = "stop";
-            button2.UseVisualStyleBackColor = true;
+            StopBtn.Enabled = false;
+            StopBtn.Font = new Font("Arial", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            StopBtn.Location = new Point(877, 243);
+            StopBtn.Name = "StopBtn";
+            StopBtn.Size = new Size(87, 43);
+            StopBtn.TabIndex = 2;
+            StopBtn.Text = "stop";
+            StopBtn.UseVisualStyleBackColor = true;
+            StopBtn.Click += StopBtn_Click;
             // 
             // textBoxLog
             // 
@@ -83,14 +87,36 @@
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
             // 
+            // comSelectBox
+            // 
+            comSelectBox.FormattingEnabled = true;
+            comSelectBox.Location = new Point(774, 42);
+            comSelectBox.Name = "comSelectBox";
+            comSelectBox.Size = new Size(151, 28);
+            comSelectBox.TabIndex = 5;
+            comSelectBox.SelectedIndexChanged += comSelectBox_SelectedIndexChanged;
+            // 
+            // refreshBtn
+            // 
+            refreshBtn.BackColor = SystemColors.Info;
+            refreshBtn.Image = Properties.Resources.refresh_icon_32pix;
+            refreshBtn.Location = new Point(942, 34);
+            refreshBtn.Name = "refreshBtn";
+            refreshBtn.Size = new Size(42, 42);
+            refreshBtn.TabIndex = 6;
+            refreshBtn.UseVisualStyleBackColor = false;
+            refreshBtn.Click += refreshBtn_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1064, 702);
+            Controls.Add(refreshBtn);
+            Controls.Add(comSelectBox);
             Controls.Add(pictureBox1);
             Controls.Add(textBoxLog);
-            Controls.Add(button2);
+            Controls.Add(StopBtn);
             Controls.Add(dataPlot);
             Controls.Add(StartBtn);
             Name = "Form1";
@@ -106,8 +132,10 @@
 
         private Button StartBtn;
         private ScottPlot.WinForms.FormsPlot dataPlot;
-        private Button button2;
+        private Button StopBtn;
         private TextBox textBoxLog;
         private PictureBox pictureBox1;
+        private ComboBox comSelectBox;
+        private Button refreshBtn;
     }
 }
