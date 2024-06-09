@@ -17,6 +17,9 @@ namespace Biosensor_GUI
         private int dataYmin = 32800;
         private int dataYmax = 32000;
         private ScottPlot.Plottables.DataStreamer streamerPlot;
+        private bool receiveDataLogFlag = false;
+        private bool serialReadFlag = false;    // true if serial read thread is active
+        private Thread serialReadThread;
         readonly System.Windows.Forms.Timer UpdatePlotTimer = new() { Interval = 50, Enabled = true }; // TODO: start timer only when we start receiving data
 
         public Form1()
@@ -40,7 +43,17 @@ namespace Biosensor_GUI
         */
         private void InitializeSerialPort(string portName)
         {
-            serialPort = new SerialPort(portName, 115200);  // TODO: set port settings explicitly (data bits, parity, ...)
+            serialPort = new SerialPort(portName);
+            serialPort.BaudRate = 115200;
+            serialPort.DataBits = 8;
+            serialPort.Parity   = Parity.None;
+            serialPort.StopBits = StopBits.One;
+            
+            serialPort.ReadTimeout = 3000;  // [ms]
+
+            // needed to communicate with Arduino:
+            serialPort.DtrEnable = true;
+            serialPort.RtsEnable = true;
 
             // serialPort.DataReceived += DataReceivedHandler; // Subscribe to the DataReceived event
 
@@ -77,28 +90,56 @@ namespace Biosensor_GUI
         /*
          * Data handling (receive and plot)
         */
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedHandler()
         {
-            while (serialPort != null && serialPort.IsOpen)
+            while (serialReadFlag)
             {
-                string data = serialPort.ReadLine();
-
-                // Update the UI in a thread-safe manner
-                Invoke(() =>
+                if (serialPort != null && serialPort.IsOpen)
                 {
-                    // Log that data is currently being received
-                    string receiveLog = "Receiving data...";
-                    if (textBoxLog.Lines.Any())
+                    if (serialPort.BytesToRead > 0)
                     {
-                        string lastLine = textBoxLog.Lines[textBoxLog.Lines.Length - 2];
-                        if (lastLine != receiveLog)
-                            textBoxLog.AppendText(receiveLog + Environment.NewLine);
+                        try
+                        {
+                            string data = serialPort.ReadLine();
+
+                            // Update the UI in a thread-safe manner
+                            Invoke(() =>
+                            {
+                                if (!receiveDataLogFlag)
+                                {
+                                    string receiveLog = "Started receiving data...";
+                                    textBoxLog.AppendText(receiveLog + Environment.NewLine);
+                                    receiveDataLogFlag = true;
+                                }
+                                if (!serialReadFlag)
+                                    textBoxLog.AppendText("...stop after this final ReadLine()" + Environment.NewLine);
+
+                                UpdateDataStreamPlot(data);
+
+                            });
+                        }
+                        catch (TimeoutException)
+                        {
+                            Invoke(() =>
+                            {
+                                textBoxLog.AppendText("Stop by Timeout" + Environment.NewLine);
+                            });
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error reading from serial port: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
-
-                    UpdateDataStreamPlot(data);
-
-                });
+                }
             }
+            receiveDataLogFlag = false;
+            // enable/disable buttons before closing the thread
+            Invoke(() =>
+            {
+                StartBtn.Enabled = true;
+                StopBtn.Enabled = false;
+            });
         }
 
         private void UpdateDataStreamPlot(string data)
@@ -129,8 +170,10 @@ namespace Biosensor_GUI
                 {
                     serialPort.Write(new byte[] { cmdToSend }, 0, 1);
                     textBoxLog.AppendText("START cmd sent" + Environment.NewLine);
-                    var t = new Thread(() => DataReceivedHandler(null, null));  // do serial port read in separate thread
-                    t.Start();
+
+                    serialReadThread = new Thread(() => DataReceivedHandler() );  // do serial port read in separate thread
+                    serialReadFlag = true;
+                    serialReadThread.Start();
 
                     StartBtn.Enabled = false;
                     StopBtn.Enabled = true;
@@ -169,10 +212,10 @@ namespace Biosensor_GUI
                     serialPort.Write(new byte[] { cmdToSend }, 0, 1);
                     textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
 
-                    // TODO: stop the thread for the serial read
+                    serialReadFlag = false;
 
-                    StartBtn.Enabled = true;
-                    StopBtn.Enabled = false;
+                    // start button enable takes place at the end of the thread function
+                    // this ensures that the thread execution is over before we can start another one
                 }
                 catch (Exception ex)
                 {
