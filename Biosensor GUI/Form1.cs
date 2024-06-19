@@ -96,7 +96,7 @@ namespace Biosensor_GUI
             {
                 if (serialPort != null && serialPort.IsOpen)
                 {
-                    if (serialPort.BytesToRead > 0)
+                    if (serialPort.BytesToRead > 0) // TODO: handle case: if no data is sent for a certain amount of time; set serialReadFlag to false and to do the same behaviour as STOP btn click
                     {
                         try
                         {
