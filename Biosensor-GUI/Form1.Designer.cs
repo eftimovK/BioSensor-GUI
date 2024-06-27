@@ -32,14 +32,18 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.comSelBox = new System.Windows.Forms.ComboBox();
+            this.refrBut = new System.Windows.Forms.Button();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.fluid_para = new System.Windows.Forms.Button();
+            this.meas_para = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -57,13 +61,15 @@
             this.start_fluid = new System.Windows.Forms.Button();
             this.start_meas = new System.Windows.Forms.Button();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.meas_para = new System.Windows.Forms.Button();
-            this.fluid_para = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // serialPort
+            // 
+            this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.DataReceived);
             // 
             // tabControl1
             // 
@@ -111,10 +117,12 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.comSelBox);
+            this.tabPage3.Controls.Add(this.refrBut);
+            this.tabPage3.Controls.Add(this.textBoxLog);
             this.tabPage3.Controls.Add(this.fluid_para);
             this.tabPage3.Controls.Add(this.meas_para);
             this.tabPage3.Controls.Add(this.chart1);
-            this.tabPage3.Controls.Add(this.richTextBox1);
             this.tabPage3.Controls.Add(this.textBox6);
             this.tabPage3.Controls.Add(this.label9);
             this.tabPage3.Controls.Add(this.label8);
@@ -140,6 +148,53 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // comSelBox
+            // 
+            this.comSelBox.FormattingEnabled = true;
+            this.comSelBox.Location = new System.Drawing.Point(831, 464);
+            this.comSelBox.Name = "comSelBox";
+            this.comSelBox.Size = new System.Drawing.Size(121, 24);
+            this.comSelBox.TabIndex = 23;
+            this.comSelBox.SelectedIndexChanged += new System.EventHandler(this.comSelBox_SelectedIndexChanged);
+            // 
+            // refrBut
+            // 
+            this.refrBut.Location = new System.Drawing.Point(981, 464);
+            this.refrBut.Name = "refrBut";
+            this.refrBut.Size = new System.Drawing.Size(75, 23);
+            this.refrBut.TabIndex = 22;
+            this.refrBut.Text = "Refresh";
+            this.refrBut.UseVisualStyleBackColor = true;
+            this.refrBut.Click += new System.EventHandler(this.refrBut_Click);
+            // 
+            // textBoxLog
+            // 
+            this.textBoxLog.Location = new System.Drawing.Point(831, 503);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.Size = new System.Drawing.Size(212, 212);
+            this.textBoxLog.TabIndex = 21;
+            // 
+            // fluid_para
+            // 
+            this.fluid_para.Location = new System.Drawing.Point(813, 215);
+            this.fluid_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fluid_para.Name = "fluid_para";
+            this.fluid_para.Size = new System.Drawing.Size(198, 60);
+            this.fluid_para.TabIndex = 20;
+            this.fluid_para.Text = "Change Parameters";
+            this.fluid_para.UseVisualStyleBackColor = true;
+            // 
+            // meas_para
+            // 
+            this.meas_para.Location = new System.Drawing.Point(200, 215);
+            this.meas_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.meas_para.Name = "meas_para";
+            this.meas_para.Size = new System.Drawing.Size(198, 60);
+            this.meas_para.TabIndex = 19;
+            this.meas_para.Text = "Change Parameters";
+            this.meas_para.UseVisualStyleBackColor = true;
+            // 
             // chart1
             // 
             chartArea2.Name = "ChartArea1";
@@ -155,15 +210,6 @@
             this.chart1.Size = new System.Drawing.Size(592, 435);
             this.chart1.TabIndex = 18;
             this.chart1.Text = "chart1";
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Location = new System.Drawing.Point(880, 437);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(309, 242);
-            this.richTextBox1.TabIndex = 17;
-            this.richTextBox1.Text = "";
             // 
             // textBox6
             // 
@@ -312,6 +358,7 @@
             this.start_meas.TabIndex = 0;
             this.start_meas.Text = "Start Measurenment";
             this.start_meas.UseVisualStyleBackColor = true;
+            this.start_meas.Click += new System.EventHandler(this.start_meas_Click);
             // 
             // tabPage4
             // 
@@ -323,26 +370,6 @@
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // meas_para
-            // 
-            this.meas_para.Location = new System.Drawing.Point(200, 215);
-            this.meas_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.meas_para.Name = "meas_para";
-            this.meas_para.Size = new System.Drawing.Size(198, 60);
-            this.meas_para.TabIndex = 19;
-            this.meas_para.Text = "Change Parameters";
-            this.meas_para.UseVisualStyleBackColor = true;
-            // 
-            // fluid_para
-            // 
-            this.fluid_para.Location = new System.Drawing.Point(813, 215);
-            this.fluid_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.fluid_para.Name = "fluid_para";
-            this.fluid_para.Size = new System.Drawing.Size(198, 60);
-            this.fluid_para.TabIndex = 20;
-            this.fluid_para.Text = "Change Parameters";
-            this.fluid_para.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -365,7 +392,7 @@
 
         #endregion
 
-        private System.IO.Ports.SerialPort serialPort1;
+        private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
@@ -388,10 +415,12 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Button fluid_para;
         private System.Windows.Forms.Button meas_para;
+        private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.ComboBox comSelBox;
+        private System.Windows.Forms.Button refrBut;
     }
 }
 
