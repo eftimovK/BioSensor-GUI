@@ -17,6 +17,10 @@ namespace Biosensor_GUI
         public Form1()
         {
             InitializeComponent();
+
+            textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
+            
+            // init plot
         }
 
 
@@ -62,20 +66,29 @@ namespace Biosensor_GUI
             {
                 string selectedPort = comSelBox.SelectedItem.ToString();
 
-                if (serialPort.PortName != selectedPort && serialPort.IsOpen)
+                if (serialPort.IsOpen)
                 {
-                    serialPort.Close();
-                    textBoxLog.AppendText("Disconnected from " + serialPort.PortName + Environment.NewLine);
+                    string currentPort = serialPort.PortName;
 
-                    serialPort.PortName = selectedPort;
-                    serialPort.Open();
-                    textBoxLog.AppendText("Connexted to " + serialPort.PortName + Environment.NewLine);
+                    serialPort.Close();
+                    textBoxLog.AppendText("Disconnected from " + currentPort + Environment.NewLine);
+                    comSelBox.BackColor = SystemColors.Window;
+
+                    if (selectedPort != currentPort)
+                    {
+                        // reconnect if a new port was selected
+                        serialPort.PortName = selectedPort;
+                        serialPort.Open();
+                        textBoxLog.AppendText("Connexted to " + selectedPort + Environment.NewLine);
+                        comSelBox.BackColor = System.Drawing.Color.PaleGreen;
+                    }
                 }
                 else
                 {
                     serialPort.PortName = selectedPort;
                     serialPort.Open();
-                    textBoxLog.AppendText("Connexted to " + serialPort.PortName + Environment.NewLine);
+                    textBoxLog.AppendText("Connexted to " + selectedPort + Environment.NewLine);
+                    comSelBox.BackColor = System.Drawing.Color.PaleGreen;
                 }
 
             }
