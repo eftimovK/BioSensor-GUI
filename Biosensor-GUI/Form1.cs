@@ -9,44 +9,112 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Xml.Linq;
 
 namespace Biosensor_GUI
 {
     public partial class Form1 : Form
     {
+        private int dataRxCount = 0;
+
+        private int dataPointsMax = 4000;   // max. number of points displayed in the plot
+        List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
+        List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
+
         public Form1()
         {
             InitializeComponent();
 
             textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
-            
-            // init plot
-        }
 
+            // init plot
+            InitializePlot();
+        }
+        private void InitializePlot()
+        {
+            // initial chart config
+
+            chartPlot.ChartAreas[0].AxisX.Minimum = 0;  // address the first ChartArea
+            chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax;
+            chartPlot.ChartAreas[0].AxisY.Minimum = 0;
+            chartPlot.ChartAreas[0].AxisY.Maximum = 10;
+
+            // add a point to the series to display the plot
+            chartPlot.Series[0].Points.AddXY(0, 0); // address the first Series of the chart
+        }
 
         /*
          * When receiving Data from the serial port than this command is executed
          */
         private void DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            textBoxLog.AppendText("Data received" + Environment.NewLine);
+            //this.Invoke(new Action<string>(updateUI), data);
+
+            string data = serialPort.ReadLine();
+
+            this.BeginInvoke(new Action(() =>
+            {
+                updateUI(data);
+            }));
+        }
+
+        private void updateUI(string data)
+        {
+            // update log
+            //string receiveLog = "Started receiving data...";
+            //textBoxLog.AppendText(receiveLog + Environment.NewLine);
+
+            // update plot
+            data = data.TrimEnd('\r', '\n');
+            int newValue;
+            bool res = Int32.TryParse(data, out newValue);
+
+            if (res)
+            {
+                dataRxCount++;
+                
+                chartPlot.Series[0].Points.AddY(newValue);
+
+                int currentDataCount = chartPlot.Series[0].Points.Count;
+
+                // store the new data in the data variables outside of the plot
+                dataPointsY.Add(newValue);
+                dataPointsX.Add(currentDataCount);
+
+                // scroll chart along with new data
+                if (chartPlot.Series[0].Points.Count > dataPointsMax)
+                {
+                    chartPlot.ChartAreas[0].AxisX.Minimum = currentDataCount - dataPointsMax;
+                    chartPlot.ChartAreas[0].AxisX.Maximum = currentDataCount;
+                }
+
+                // set the y-axis limits within the min/max of the past values
+                int lastValuesCount = Math.Min(currentDataCount, dataPointsMax );
+                List<int> lastValues = dataPointsY.Skip(currentDataCount - lastValuesCount).ToList();
+
+                int maxLastValues = lastValues.Max();
+                int minLastValues = lastValues.Min();
+
+                chartPlot.ChartAreas[0].AxisY.Minimum = minLastValues - 100;
+                chartPlot.ChartAreas[0].AxisY.Maximum = maxLastValues + 100;
+            }
         }
 
         /*
          * starts the predefined measurenment sequence
          */
-        private void start_meas_Click(object sender, EventArgs e)
+        private void startMeasBtn_Click(object sender, EventArgs e)
         {
             if (serialPort != null && serialPort.IsOpen)
             {
-                byte cmdToSend = (byte)(1); // one means 'start-measurement'
-
                 try
                 {
-                    serialPort.Write(new byte[] { cmdToSend }, 0, 1);
+                    serialPort.Write(new byte[] { CommandSet.START_MEAS }, 0, 1);
                     textBoxLog.AppendText("START cmd sent" + Environment.NewLine);
 
                     //enable or disable buttons
+                    //startMeasBtn.Enabled = false;
                 }
                 catch (Exception ex)
                 {
@@ -65,6 +133,9 @@ namespace Biosensor_GUI
             if (comSelBox.SelectedItem != null)
             {
                 string selectedPort = comSelBox.SelectedItem.ToString();
+
+                // TODO: if port initialization for the first time does not differ from reconnecting
+                // then the code below can be shortened
 
                 if (serialPort.IsOpen)
                 {
