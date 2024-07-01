@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
@@ -10,6 +11,7 @@ namespace Biosensor_GUI
     public partial class Form1 : Form
     {
         private int dataRxCount = 0;
+        private int measCounter = 1;
 
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
         List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
@@ -118,6 +120,11 @@ namespace Biosensor_GUI
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            //wait 10s
+            //try --> write StopCommand
+            // save Data 
+            //update UI
         }
 
         //Select Com through selection box --> search for and select available Ports
@@ -166,6 +173,27 @@ namespace Biosensor_GUI
             if (ports.Length != 0)
             {
                 comSelBox.Items.AddRange(ports);
+            }
+        }
+
+        private void saveDataBut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
+
+                var writeDataX = string.Join(";", dataPointsX);
+                var writeDataY = string.Join(";", dataPointsY);
+                string[] writeData = { writeDataX, writeDataY };
+
+                File.WriteAllLines(dataPath, writeData);
+                textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
+
+                measCounter += 1;
+            }
+            catch
+            {
+                textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
             }
         }
     }
