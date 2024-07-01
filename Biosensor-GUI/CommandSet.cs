@@ -9,8 +9,9 @@ namespace Biosensor_GUI
     internal static class CommandSet
     {
         public static readonly byte START_MEAS   = 1;
-        public static readonly byte STOP         = 2;
-        public static readonly byte START_CONFIG = 3;
+        public static readonly byte STOP_MEAS    = 0;
+        public static readonly byte START_CONFIG = 5;
+        public static readonly byte STOP_CONFIG  = 6;
 
         /* Pameters for configuration */
         public static readonly byte SET_VOLTAGE = 100;  /*!< Set voltage level */
