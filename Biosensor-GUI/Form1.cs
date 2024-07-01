@@ -23,6 +23,7 @@ namespace Biosensor_GUI
 
             textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
 
+           refrBut_Click(this, EventArgs.Empty);
             // init plot
             InitializePlot();
         }
@@ -182,10 +183,19 @@ namespace Biosensor_GUI
             {
                 string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
 
-                var writeDataX = string.Join(";", dataPointsX);
-                var writeDataY = string.Join(";", dataPointsY);
-                string[] writeData = { writeDataX, writeDataY };
+                //var writeDataX = string.Join(" ", dataPointsX);
+                //var writeDataY = string.Join(" ", dataPointsY);
+                //string[] writeData = { writeDataX, writeDataY };
 
+                // Create an array to hold the lines
+                string[] writeData = new string[dataPointsX.Count];
+
+                // Populate the lines array
+                for (int i = 0; i < dataPointsX.Count; i++)
+                {
+                    writeData[i] = $"{dataPointsX[i]} {dataPointsY[i]}";
+                }
+                // Write all lines to the file
                 File.WriteAllLines(dataPath, writeData);
                 textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
 
