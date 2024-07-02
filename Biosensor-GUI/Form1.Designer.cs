@@ -60,6 +60,11 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.dataPathBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.saveDataBut = new System.Windows.Forms.Button();
+            this.fileNameBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPageMeasure.SuspendLayout();
@@ -121,6 +126,7 @@
             // 
             // tabPageMeasure
             // 
+            this.tabPageMeasure.Controls.Add(this.saveDataBut);
             this.tabPageMeasure.Controls.Add(this.startFluidBtn);
             this.tabPageMeasure.Controls.Add(this.chartPlot);
             this.tabPageMeasure.Controls.Add(this.startMeasBtn);
@@ -178,6 +184,10 @@
             // 
             // tabPageConfig
             // 
+            this.tabPageConfig.Controls.Add(this.label10);
+            this.tabPageConfig.Controls.Add(this.fileNameBox);
+            this.tabPageConfig.Controls.Add(this.label4);
+            this.tabPageConfig.Controls.Add(this.dataPathBox);
             this.tabPageConfig.Controls.Add(this.comSelBox);
             this.tabPageConfig.Controls.Add(this.refreshBtn);
             this.tabPageConfig.Controls.Add(this.measParamBtn);
@@ -192,6 +202,7 @@
             this.tabPageConfig.Controls.Add(this.label5);
             this.tabPageConfig.Controls.Add(this.label2);
             this.tabPageConfig.Controls.Add(this.textBoxPumpTime);
+            
             this.tabPageConfig.Location = new System.Drawing.Point(4, 25);
             this.tabPageConfig.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageConfig.Name = "tabPageConfig";
@@ -383,6 +394,57 @@
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // dataPathBox
+            // 
+            this.dataPathBox.Location = new System.Drawing.Point(877, 191);
+            this.dataPathBox.Margin = new System.Windows.Forms.Padding(4);
+            this.dataPathBox.Multiline = true;
+            this.dataPathBox.Name = "dataPathBox";
+            this.dataPathBox.Size = new System.Drawing.Size(206, 67);
+            this.dataPathBox.TabIndex = 41;
+            this.dataPathBox.Text = "C:\\Users\\Isaac\\Documents\\Studium\\SensUs\\Data\\SensUsGui";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(874, 171);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(66, 16);
+            this.label4.TabIndex = 42;
+            this.label4.Text = "Data Path";
+            // 
+            // saveDataBut
+            // 
+            this.saveDataBut.Location = new System.Drawing.Point(513, 124);
+            this.saveDataBut.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.saveDataBut.Name = "saveDataBut";
+            this.saveDataBut.Size = new System.Drawing.Size(96, 32);
+            this.saveDataBut.TabIndex = 40;
+            this.saveDataBut.Text = "Save Data";
+            this.saveDataBut.UseVisualStyleBackColor = true;
+            this.saveDataBut.Click += new System.EventHandler(this.saveDataBut_Click);
+            // 
+            // fileNameBox
+            // 
+            this.fileNameBox.Location = new System.Drawing.Point(877, 285);
+            this.fileNameBox.Margin = new System.Windows.Forms.Padding(4);
+            this.fileNameBox.Multiline = true;
+            this.fileNameBox.Name = "fileNameBox";
+            this.fileNameBox.Size = new System.Drawing.Size(206, 67);
+            this.fileNameBox.TabIndex = 43;
+            this.fileNameBox.Text = "Measurement ";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(874, 265);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(69, 16);
+            this.label10.TabIndex = 44;
+            this.label10.Text = "File Name";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -437,6 +499,11 @@
         private System.Windows.Forms.ComboBox comSelBox;
         private System.Windows.Forms.Button refreshBtn;
         private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.Button saveDataBut;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox dataPathBox;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox fileNameBox;
     }
 }
 

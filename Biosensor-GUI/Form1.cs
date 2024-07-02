@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ namespace Biosensor_GUI
     public partial class Form1 : Form
     {
         private int dataRxCount = 0;
+        private int measCounter = 1;
 
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
         List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
@@ -24,6 +26,7 @@ namespace Biosensor_GUI
 
             textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
 
+           refrBut_Click(this, EventArgs.Empty);
             // init plot
             InitializePlot();
         }
@@ -145,6 +148,11 @@ namespace Biosensor_GUI
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            //wait 10s
+            //try --> write StopCommand
+            // save Data 
+            //update UI
         }
 
         //Select Com through selection box --> search for and select available Ports
@@ -283,6 +291,36 @@ namespace Biosensor_GUI
             else
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void saveDataBut_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
+
+                //var writeDataX = string.Join(" ", dataPointsX);
+                //var writeDataY = string.Join(" ", dataPointsY);
+                //string[] writeData = { writeDataX, writeDataY };
+
+                // Create an array to hold the lines
+                string[] writeData = new string[dataPointsX.Count];
+
+                // Populate the lines array
+                for (int i = 0; i < dataPointsX.Count; i++)
+                {
+                    writeData[i] = $"{dataPointsX[i]} {dataPointsY[i]}";
+                }
+                // Write all lines to the file
+                File.WriteAllLines(dataPath, writeData);
+                textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
+
+                measCounter += 1;
+            }
+            catch
+            {
+                textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
             }
         }
     }
