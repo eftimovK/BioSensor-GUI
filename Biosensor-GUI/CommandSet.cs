@@ -10,7 +10,7 @@ namespace Biosensor_GUI
     {
         public static readonly byte START_MEAS   = 1;
         public static readonly byte STOP_MEAS    = 0;
-        public static readonly byte START_CONFIG = 5;
+        public static readonly byte START_CONFIG = 5;   /*!< Enter parameter configuration */
         public static readonly byte STOP_CONFIG  = 6;
 
         /* Pameters for configuration */

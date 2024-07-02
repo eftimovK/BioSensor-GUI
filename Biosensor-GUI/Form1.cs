@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Biosensor_GUI
 {
@@ -14,6 +15,8 @@ namespace Biosensor_GUI
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
         List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
         List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
+        bool readConfigData = false;                // marks whether the data received refers to the config cmds
+        int configSuccess = -1;                     // -1 denotes that no return value (0 or 1) was read from the port
 
         public Form1()
         {
@@ -42,14 +45,38 @@ namespace Biosensor_GUI
          */
         private void DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            //this.Invoke(new Action<string>(updateUI), data);
-
-            string data = serialPort.ReadLine();
-
-            this.BeginInvoke(new Action(() =>
+            // TODO: change approach => use an encoding for the data received
+            
+            if (readConfigData) // incoming data refers to config cmds
             {
-                updateUI(data);
-            }));
+                // set config bool flag based on return value
+                byte[] byteArray = new byte[1] { 0 };
+                serialPort.Read(byteArray, 0, 1);
+
+                configSuccess = byteArray[0];
+            }
+            else    // we receive data for plotting
+            {
+                string data = serialPort.ReadLine();
+
+                this.BeginInvoke(new Action(() =>
+                {
+                    updateUI(data);
+                }));
+            }
+        }
+
+        private bool ConfigSuccess()
+        {
+            bool configSuccessTemp = false;
+            while (configSuccess == -1) // wait until the config success bool was sent from the uC and read from the serialPort
+            {
+            }
+            configSuccessTemp = (configSuccess == 1);
+            // config success bool was read from serial port => reset it for the next time
+            configSuccess = -1;
+
+            return configSuccessTemp;
         }
 
         private void updateUI(string data)
@@ -159,13 +186,103 @@ namespace Biosensor_GUI
         }
 
         //Refresh the com selection Box  
-        private void refrBut_Click(object sender, EventArgs e)
+        private void refreshBtn_Click(object sender, EventArgs e)
         {
             comSelBox.Items.Clear();
             string[] ports = SerialPort.GetPortNames();
             if (ports.Length != 0)
             {
                 comSelBox.Items.AddRange(ports);
+            }
+        }
+
+        private void measParamBtn_Click(object sender, EventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                try
+                {
+                    readConfigData = true;  // mark that incoming data refers to config cmd return values
+                    string logText = "";
+
+                    // start config
+                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                    // set voltage
+                    string voltageStr = textBoxVoltage.Text;
+                    if (Int32.TryParse(voltageStr, out int voltageInt))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(voltageInt);
+
+                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        if (ConfigSuccess())
+                        {
+                            logText = "Voltage set to " + voltageStr + " mV";
+                        }
+                        else
+                        {
+                            logText = "Voltage set failed";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid integers within the correct range.");
+                    }
+
+                    // set duration
+                    string voltageDurationStr = textBoxVoltageDuration.Text;
+                    if (Int32.TryParse(voltageDurationStr, out int voltageDurationInt))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(voltageDurationInt);
+
+                        // set voltage duration (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_DUR }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        if (ConfigSuccess())
+                        {
+                            logText = "Voltage duration set to " + voltageDurationStr + " mV";
+                        }
+                        else
+                        {
+                            logText = "Voltage duration set failed";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid integers within the correct range.");
+                    }
+
+                    // stop config
+                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                    if (ConfigSuccess())
+                    {
+                        logText = "Stopped parameter config";
+                    }
+                    else
+                    {
+                        logText = "Stop parameter config failed";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+
+                    readConfigData = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
