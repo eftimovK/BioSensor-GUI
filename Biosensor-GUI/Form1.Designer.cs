@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -43,23 +43,19 @@
             this.startMeasBtn = new System.Windows.Forms.Button();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
             this.comSelBox = new System.Windows.Forms.ComboBox();
-            this.refrBut = new System.Windows.Forms.Button();
-            this.meas_para = new System.Windows.Forms.Button();
-            this.label8 = new System.Windows.Forms.Label();
+            this.refreshBtn = new System.Windows.Forms.Button();
+            this.measParamBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxVoltage = new System.Windows.Forms.TextBox();
+            this.textBoxVoltageDuration = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.fluid_para = new System.Windows.Forms.Button();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.fluidParamBtn = new System.Windows.Forms.Button();
+            this.textBoxPumpPressure = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBoxPumpTime = new System.Windows.Forms.TextBox();
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
@@ -155,22 +151,22 @@
             // 
             // chartPlot
             // 
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.BackColor = System.Drawing.Color.White;
-            chartArea1.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend1);
+            chartArea6.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea6.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea6.BackColor = System.Drawing.Color.White;
+            chartArea6.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend6);
             this.chartPlot.Location = new System.Drawing.Point(25, 143);
             this.chartPlot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chartPlot.Name = "chartPlot";
-            series1.BorderWidth = 3;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Data Received";
-            this.chartPlot.Series.Add(series1);
+            series6.BorderWidth = 3;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Data Received";
+            this.chartPlot.Series.Add(series6);
             this.chartPlot.Size = new System.Drawing.Size(1141, 592);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -193,23 +189,20 @@
             this.tabPageConfig.Controls.Add(this.label4);
             this.tabPageConfig.Controls.Add(this.dataPathBox);
             this.tabPageConfig.Controls.Add(this.comSelBox);
-            this.tabPageConfig.Controls.Add(this.refrBut);
-            this.tabPageConfig.Controls.Add(this.meas_para);
-            this.tabPageConfig.Controls.Add(this.label8);
+            this.tabPageConfig.Controls.Add(this.refreshBtn);
+            this.tabPageConfig.Controls.Add(this.measParamBtn);
             this.tabPageConfig.Controls.Add(this.label7);
             this.tabPageConfig.Controls.Add(this.label6);
-            this.tabPageConfig.Controls.Add(this.label3);
-            this.tabPageConfig.Controls.Add(this.textBox5);
-            this.tabPageConfig.Controls.Add(this.textBox4);
-            this.tabPageConfig.Controls.Add(this.textBox3);
-            this.tabPageConfig.Controls.Add(this.textBox1);
+            this.tabPageConfig.Controls.Add(this.textBoxVoltage);
+            this.tabPageConfig.Controls.Add(this.textBoxVoltageDuration);
             this.tabPageConfig.Controls.Add(this.label1);
-            this.tabPageConfig.Controls.Add(this.fluid_para);
-            this.tabPageConfig.Controls.Add(this.textBox6);
+            this.tabPageConfig.Controls.Add(this.fluidParamBtn);
+            this.tabPageConfig.Controls.Add(this.textBoxPumpPressure);
             this.tabPageConfig.Controls.Add(this.label9);
             this.tabPageConfig.Controls.Add(this.label5);
             this.tabPageConfig.Controls.Add(this.label2);
-            this.tabPageConfig.Controls.Add(this.textBox2);
+            this.tabPageConfig.Controls.Add(this.textBoxPumpTime);
+            
             this.tabPageConfig.Location = new System.Drawing.Point(4, 25);
             this.tabPageConfig.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageConfig.Name = "tabPageConfig";
@@ -229,127 +222,96 @@
             this.comSelBox.TabIndex = 40;
             this.comSelBox.SelectedIndexChanged += new System.EventHandler(this.comSelBox_SelectedIndexChanged);
             // 
-            // refrBut
+            // refreshBtn
             // 
-            this.refrBut.Location = new System.Drawing.Point(921, 62);
-            this.refrBut.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.refrBut.Name = "refrBut";
-            this.refrBut.Size = new System.Drawing.Size(96, 32);
-            this.refrBut.TabIndex = 39;
-            this.refrBut.Text = "Refresh";
-            this.refrBut.UseVisualStyleBackColor = true;
-            this.refrBut.Click += new System.EventHandler(this.refrBut_Click);
+            this.refreshBtn.Location = new System.Drawing.Point(921, 62);
+            this.refreshBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.refreshBtn.Name = "refreshBtn";
+            this.refreshBtn.Size = new System.Drawing.Size(96, 32);
+            this.refreshBtn.TabIndex = 39;
+            this.refreshBtn.Text = "Refresh";
+            this.refreshBtn.UseVisualStyleBackColor = true;
+            this.refreshBtn.Click += new System.EventHandler(this.refreshBtn_Click);
             // 
-            // meas_para
+            // measParamBtn
             // 
-            this.meas_para.Location = new System.Drawing.Point(73, 272);
-            this.meas_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.meas_para.Name = "meas_para";
-            this.meas_para.Size = new System.Drawing.Size(212, 116);
-            this.meas_para.TabIndex = 37;
-            this.meas_para.Text = "Change Parameters";
-            this.meas_para.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(288, 154);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(98, 16);
-            this.label8.TabIndex = 36;
-            this.label8.Text = "Pump pressure";
+            this.measParamBtn.Location = new System.Drawing.Point(84, 209);
+            this.measParamBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.measParamBtn.Name = "measParamBtn";
+            this.measParamBtn.Size = new System.Drawing.Size(172, 91);
+            this.measParamBtn.TabIndex = 37;
+            this.measParamBtn.Text = "Change Parameters";
+            this.measParamBtn.UseVisualStyleBackColor = true;
+            this.measParamBtn.Click += new System.EventHandler(this.measParamBtn_Click);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(288, 191);
+            this.label7.Location = new System.Drawing.Point(290, 117);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(54, 16);
+            this.label7.Size = new System.Drawing.Size(85, 16);
             this.label7.TabIndex = 35;
-            this.label7.Text = "Voltage";
+            this.label7.Text = "Voltage [mV]";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(288, 228);
+            this.label6.Location = new System.Drawing.Point(290, 154);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 16);
+            this.label6.Size = new System.Drawing.Size(132, 16);
             this.label6.TabIndex = 34;
-            this.label6.Text = "Voltage Time";
+            this.label6.Text = "Voltage Duration [µs]";
             // 
-            // label3
+            // textBoxVoltage
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(288, 117);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 16);
-            this.label3.TabIndex = 33;
-            this.label3.Text = "Pump time (s)";
+            this.textBoxVoltage.Location = new System.Drawing.Point(73, 112);
+            this.textBoxVoltage.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxVoltage.Name = "textBoxVoltage";
+            this.textBoxVoltage.Size = new System.Drawing.Size(192, 22);
+            this.textBoxVoltage.TabIndex = 31;
+            this.textBoxVoltage.Text = "0";
+            this.textBoxVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBox5
+            // textBoxVoltageDuration
             // 
-            this.textBox5.Location = new System.Drawing.Point(71, 149);
-            this.textBox5.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(192, 22);
-            this.textBox5.TabIndex = 32;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(71, 186);
-            this.textBox4.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(192, 22);
-            this.textBox4.TabIndex = 31;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(71, 223);
-            this.textBox3.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(192, 22);
-            this.textBox3.TabIndex = 30;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(71, 112);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(192, 22);
-            this.textBox1.TabIndex = 29;
+            this.textBoxVoltageDuration.Location = new System.Drawing.Point(73, 149);
+            this.textBoxVoltageDuration.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxVoltageDuration.Name = "textBoxVoltageDuration";
+            this.textBoxVoltageDuration.Size = new System.Drawing.Size(192, 22);
+            this.textBoxVoltageDuration.TabIndex = 30;
+            this.textBoxVoltageDuration.Text = "1000000";
+            this.textBoxVoltageDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(39, 54);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(95, 50);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(274, 20);
+            this.label1.Size = new System.Drawing.Size(132, 25);
             this.label1.TabIndex = 28;
-            this.label1.Text = "Change Measurenment Parameters";
+            this.label1.Text = "Measurement";
             // 
-            // fluid_para
+            // fluidParamBtn
             // 
-            this.fluid_para.Location = new System.Drawing.Point(459, 210);
-            this.fluid_para.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.fluid_para.Name = "fluid_para";
-            this.fluid_para.Size = new System.Drawing.Size(200, 116);
-            this.fluid_para.TabIndex = 27;
-            this.fluid_para.Text = "Change Parameters";
-            this.fluid_para.UseVisualStyleBackColor = true;
+            this.fluidParamBtn.Location = new System.Drawing.Point(469, 209);
+            this.fluidParamBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fluidParamBtn.Name = "fluidParamBtn";
+            this.fluidParamBtn.Size = new System.Drawing.Size(171, 91);
+            this.fluidParamBtn.TabIndex = 27;
+            this.fluidParamBtn.Text = "Change Parameters";
+            this.fluidParamBtn.UseVisualStyleBackColor = true;
             // 
-            // textBox6
+            // textBoxPumpPressure
             // 
-            this.textBox6.Location = new System.Drawing.Point(459, 153);
-            this.textBox6.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(192, 22);
-            this.textBox6.TabIndex = 26;
+            this.textBoxPumpPressure.Location = new System.Drawing.Point(459, 153);
+            this.textBoxPumpPressure.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPumpPressure.Name = "textBoxPumpPressure";
+            this.textBoxPumpPressure.Size = new System.Drawing.Size(192, 22);
+            this.textBoxPumpPressure.TabIndex = 26;
             // 
             // label9
             // 
@@ -359,7 +321,7 @@
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(88, 16);
             this.label9.TabIndex = 25;
-            this.label9.Text = "Pump time (s)";
+            this.label9.Text = "Pump time [s]";
             // 
             // label5
             // 
@@ -374,21 +336,21 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(428, 54);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(532, 50);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(274, 20);
+            this.label2.Size = new System.Drawing.Size(63, 25);
             this.label2.TabIndex = 23;
-            this.label2.Text = "Change Measurenment Parameters";
+            this.label2.Text = "Pump";
             // 
-            // textBox2
+            // textBoxPumpTime
             // 
-            this.textBox2.Location = new System.Drawing.Point(459, 108);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(192, 22);
-            this.textBox2.TabIndex = 22;
+            this.textBoxPumpTime.Location = new System.Drawing.Point(459, 108);
+            this.textBoxPumpTime.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPumpTime.Name = "textBoxPumpTime";
+            this.textBoxPumpTime.Size = new System.Drawing.Size(192, 22);
+            this.textBoxPumpTime.TabIndex = 22;
             // 
             // textBoxLog
             // 
@@ -522,24 +484,20 @@
         private System.Windows.Forms.TabPage tabPage5;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button startFluidBtn;
-        private System.Windows.Forms.Button fluid_para;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button fluidParamBtn;
+        private System.Windows.Forms.TextBox textBoxPumpPressure;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button meas_para;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox textBoxPumpTime;
+        private System.Windows.Forms.Button measParamBtn;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxVoltage;
+        private System.Windows.Forms.TextBox textBoxVoltageDuration;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comSelBox;
-        private System.Windows.Forms.Button refrBut;
+        private System.Windows.Forms.Button refreshBtn;
         private System.Windows.Forms.TextBox textBoxLog;
         private System.Windows.Forms.Button saveDataBut;
         private System.Windows.Forms.Label label4;
