@@ -29,19 +29,24 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageMeasure = new System.Windows.Forms.TabPage();
+            this.saveDataBut = new System.Windows.Forms.Button();
             this.startFluidBtn = new System.Windows.Forms.Button();
             this.chartPlot = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.startMeasBtn = new System.Windows.Forms.Button();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.fileNameBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.dataPathBox = new System.Windows.Forms.TextBox();
             this.comSelBox = new System.Windows.Forms.ComboBox();
             this.refreshBtn = new System.Windows.Forms.Button();
             this.measParamBtn = new System.Windows.Forms.Button();
@@ -60,11 +65,6 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.dataPathBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.saveDataBut = new System.Windows.Forms.Button();
-            this.fileNameBox = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPageMeasure.SuspendLayout();
@@ -84,19 +84,19 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(620, 370);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabControl1.Location = new System.Drawing.Point(465, 301);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(8, 7);
+            this.tabControl1.Size = new System.Drawing.Size(6, 6);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Size = new System.Drawing.Size(0, 0);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
@@ -104,10 +104,10 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Size = new System.Drawing.Size(0, 0);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
@@ -117,11 +117,11 @@
             // 
             this.tabControl2.Controls.Add(this.tabPageMeasure);
             this.tabControl2.Controls.Add(this.tabPageConfig);
-            this.tabControl2.Location = new System.Drawing.Point(15, 0);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabControl2.Location = new System.Drawing.Point(11, 0);
+            this.tabControl2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(1236, 826);
+            this.tabControl2.Size = new System.Drawing.Size(927, 671);
             this.tabControl2.TabIndex = 1;
             // 
             // tabPageMeasure
@@ -130,53 +130,64 @@
             this.tabPageMeasure.Controls.Add(this.startFluidBtn);
             this.tabPageMeasure.Controls.Add(this.chartPlot);
             this.tabPageMeasure.Controls.Add(this.startMeasBtn);
-            this.tabPageMeasure.Location = new System.Drawing.Point(4, 25);
-            this.tabPageMeasure.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageMeasure.Location = new System.Drawing.Point(4, 22);
+            this.tabPageMeasure.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPageMeasure.Name = "tabPageMeasure";
-            this.tabPageMeasure.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageMeasure.Size = new System.Drawing.Size(1228, 797);
+            this.tabPageMeasure.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageMeasure.Size = new System.Drawing.Size(919, 645);
             this.tabPageMeasure.TabIndex = 0;
             this.tabPageMeasure.Text = "Measure";
             this.tabPageMeasure.UseVisualStyleBackColor = true;
             // 
+            // saveDataBut
+            // 
+            this.saveDataBut.Location = new System.Drawing.Point(385, 101);
+            this.saveDataBut.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.saveDataBut.Name = "saveDataBut";
+            this.saveDataBut.Size = new System.Drawing.Size(72, 26);
+            this.saveDataBut.TabIndex = 40;
+            this.saveDataBut.Text = "Save Data";
+            this.saveDataBut.UseVisualStyleBackColor = true;
+            this.saveDataBut.Click += new System.EventHandler(this.saveDataBut_Click);
+            // 
             // startFluidBtn
             // 
-            this.startFluidBtn.Location = new System.Drawing.Point(647, 36);
-            this.startFluidBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.startFluidBtn.Location = new System.Drawing.Point(485, 29);
+            this.startFluidBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startFluidBtn.Name = "startFluidBtn";
-            this.startFluidBtn.Size = new System.Drawing.Size(205, 79);
+            this.startFluidBtn.Size = new System.Drawing.Size(154, 64);
             this.startFluidBtn.TabIndex = 24;
             this.startFluidBtn.Text = "Start Intermediate Fluid";
             this.startFluidBtn.UseVisualStyleBackColor = true;
             // 
             // chartPlot
             // 
-            chartArea6.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea6.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea6.BackColor = System.Drawing.Color.White;
-            chartArea6.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend6);
-            this.chartPlot.Location = new System.Drawing.Point(25, 143);
-            this.chartPlot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea1.BackColor = System.Drawing.Color.White;
+            chartArea1.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend1);
+            this.chartPlot.Location = new System.Drawing.Point(19, 116);
+            this.chartPlot.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chartPlot.Name = "chartPlot";
-            series6.BorderWidth = 3;
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Legend = "Legend1";
-            series6.Name = "Data Received";
-            this.chartPlot.Series.Add(series6);
-            this.chartPlot.Size = new System.Drawing.Size(1141, 592);
+            series1.BorderWidth = 3;
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Data Received";
+            this.chartPlot.Series.Add(series1);
+            this.chartPlot.Size = new System.Drawing.Size(856, 481);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
             // 
             // startMeasBtn
             // 
-            this.startMeasBtn.Location = new System.Drawing.Point(264, 39);
-            this.startMeasBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.startMeasBtn.Location = new System.Drawing.Point(198, 32);
+            this.startMeasBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.startMeasBtn.Name = "startMeasBtn";
-            this.startMeasBtn.Size = new System.Drawing.Size(211, 75);
+            this.startMeasBtn.Size = new System.Drawing.Size(158, 61);
             this.startMeasBtn.TabIndex = 0;
             this.startMeasBtn.Text = "Start Measurement";
             this.startMeasBtn.UseVisualStyleBackColor = true;
@@ -202,32 +213,67 @@
             this.tabPageConfig.Controls.Add(this.label5);
             this.tabPageConfig.Controls.Add(this.label2);
             this.tabPageConfig.Controls.Add(this.textBoxPumpTime);
-            
-            this.tabPageConfig.Location = new System.Drawing.Point(4, 25);
-            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.tabPageConfig.Location = new System.Drawing.Point(4, 22);
+            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPageConfig.Name = "tabPageConfig";
-            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPageConfig.Size = new System.Drawing.Size(1228, 797);
+            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageConfig.Size = new System.Drawing.Size(919, 645);
             this.tabPageConfig.TabIndex = 1;
             this.tabPageConfig.Text = "Config";
             this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(656, 215);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(64, 15);
+            this.label10.TabIndex = 44;
+            this.label10.Text = "File Name";
+            // 
+            // fileNameBox
+            // 
+            this.fileNameBox.Location = new System.Drawing.Point(658, 232);
+            this.fileNameBox.Multiline = true;
+            this.fileNameBox.Name = "fileNameBox";
+            this.fileNameBox.Size = new System.Drawing.Size(156, 55);
+            this.fileNameBox.TabIndex = 43;
+            this.fileNameBox.Text = "Measurement ";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(656, 139);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(61, 15);
+            this.label4.TabIndex = 42;
+            this.label4.Text = "Data Path";
+            // 
+            // dataPathBox
+            // 
+            this.dataPathBox.Location = new System.Drawing.Point(658, 155);
+            this.dataPathBox.Multiline = true;
+            this.dataPathBox.Name = "dataPathBox";
+            this.dataPathBox.Size = new System.Drawing.Size(156, 55);
+            this.dataPathBox.TabIndex = 41;
+            this.dataPathBox.Text = "C:\\Users\\Isaac\\Documents\\Studium\\SensUs\\Data\\SensUsGui";
+            // 
             // comSelBox
             // 
             this.comSelBox.FormattingEnabled = true;
-            this.comSelBox.Location = new System.Drawing.Point(877, 111);
-            this.comSelBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.comSelBox.Location = new System.Drawing.Point(658, 90);
+            this.comSelBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.comSelBox.Name = "comSelBox";
-            this.comSelBox.Size = new System.Drawing.Size(181, 24);
+            this.comSelBox.Size = new System.Drawing.Size(137, 21);
             this.comSelBox.TabIndex = 40;
             this.comSelBox.SelectedIndexChanged += new System.EventHandler(this.comSelBox_SelectedIndexChanged);
             // 
             // refreshBtn
             // 
-            this.refreshBtn.Location = new System.Drawing.Point(921, 62);
-            this.refreshBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.refreshBtn.Location = new System.Drawing.Point(691, 50);
+            this.refreshBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.refreshBtn.Name = "refreshBtn";
-            this.refreshBtn.Size = new System.Drawing.Size(96, 32);
+            this.refreshBtn.Size = new System.Drawing.Size(72, 26);
             this.refreshBtn.TabIndex = 39;
             this.refreshBtn.Text = "Refresh";
             this.refreshBtn.UseVisualStyleBackColor = true;
@@ -235,10 +281,10 @@
             // 
             // measParamBtn
             // 
-            this.measParamBtn.Location = new System.Drawing.Point(84, 209);
-            this.measParamBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.measParamBtn.Location = new System.Drawing.Point(63, 170);
+            this.measParamBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.measParamBtn.Name = "measParamBtn";
-            this.measParamBtn.Size = new System.Drawing.Size(172, 91);
+            this.measParamBtn.Size = new System.Drawing.Size(129, 74);
             this.measParamBtn.TabIndex = 37;
             this.measParamBtn.Text = "Change Parameters";
             this.measParamBtn.UseVisualStyleBackColor = true;
@@ -247,39 +293,35 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(290, 117);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(218, 95);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(85, 16);
+            this.label7.Size = new System.Drawing.Size(75, 15);
             this.label7.TabIndex = 35;
             this.label7.Text = "Voltage [mV]";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(290, 154);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Location = new System.Drawing.Point(218, 125);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(132, 16);
+            this.label6.Size = new System.Drawing.Size(120, 15);
             this.label6.TabIndex = 34;
             this.label6.Text = "Voltage Duration [µs]";
             // 
             // textBoxVoltage
             // 
-            this.textBoxVoltage.Location = new System.Drawing.Point(73, 112);
-            this.textBoxVoltage.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxVoltage.Location = new System.Drawing.Point(55, 91);
             this.textBoxVoltage.Name = "textBoxVoltage";
-            this.textBoxVoltage.Size = new System.Drawing.Size(192, 22);
+            this.textBoxVoltage.Size = new System.Drawing.Size(145, 20);
             this.textBoxVoltage.TabIndex = 31;
             this.textBoxVoltage.Text = "0";
             this.textBoxVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxVoltageDuration
             // 
-            this.textBoxVoltageDuration.Location = new System.Drawing.Point(73, 149);
-            this.textBoxVoltageDuration.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxVoltageDuration.Location = new System.Drawing.Point(55, 121);
             this.textBoxVoltageDuration.Name = "textBoxVoltageDuration";
-            this.textBoxVoltageDuration.Size = new System.Drawing.Size(192, 22);
+            this.textBoxVoltageDuration.Size = new System.Drawing.Size(145, 20);
             this.textBoxVoltageDuration.TabIndex = 30;
             this.textBoxVoltageDuration.Text = "1000000";
             this.textBoxVoltageDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -288,8 +330,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(95, 50);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(71, 41);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(132, 25);
             this.label1.TabIndex = 28;
@@ -297,48 +338,49 @@
             // 
             // fluidParamBtn
             // 
-            this.fluidParamBtn.Location = new System.Drawing.Point(469, 209);
-            this.fluidParamBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.fluidParamBtn.Enabled = false;
+            this.fluidParamBtn.Location = new System.Drawing.Point(352, 170);
+            this.fluidParamBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.fluidParamBtn.Name = "fluidParamBtn";
-            this.fluidParamBtn.Size = new System.Drawing.Size(171, 91);
+            this.fluidParamBtn.Size = new System.Drawing.Size(128, 74);
             this.fluidParamBtn.TabIndex = 27;
             this.fluidParamBtn.Text = "Change Parameters";
             this.fluidParamBtn.UseVisualStyleBackColor = true;
             // 
             // textBoxPumpPressure
             // 
-            this.textBoxPumpPressure.Location = new System.Drawing.Point(459, 153);
-            this.textBoxPumpPressure.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPumpPressure.Enabled = false;
+            this.textBoxPumpPressure.Location = new System.Drawing.Point(344, 124);
             this.textBoxPumpPressure.Name = "textBoxPumpPressure";
-            this.textBoxPumpPressure.Size = new System.Drawing.Size(192, 22);
+            this.textBoxPumpPressure.Size = new System.Drawing.Size(145, 20);
             this.textBoxPumpPressure.TabIndex = 26;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(660, 112);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Enabled = false;
+            this.label9.Location = new System.Drawing.Point(495, 91);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(88, 16);
+            this.label9.Size = new System.Drawing.Size(82, 15);
             this.label9.TabIndex = 25;
             this.label9.Text = "Pump time [s]";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(660, 156);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Enabled = false;
+            this.label5.Location = new System.Drawing.Point(495, 127);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(101, 16);
+            this.label5.Size = new System.Drawing.Size(94, 15);
             this.label5.TabIndex = 24;
             this.label5.Text = "Pump pressure ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Enabled = false;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(532, 50);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(399, 41);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(63, 25);
             this.label2.TabIndex = 23;
@@ -346,115 +388,60 @@
             // 
             // textBoxPumpTime
             // 
-            this.textBoxPumpTime.Location = new System.Drawing.Point(459, 108);
-            this.textBoxPumpTime.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPumpTime.Enabled = false;
+            this.textBoxPumpTime.Location = new System.Drawing.Point(344, 88);
             this.textBoxPumpTime.Name = "textBoxPumpTime";
-            this.textBoxPumpTime.Size = new System.Drawing.Size(192, 22);
+            this.textBoxPumpTime.Size = new System.Drawing.Size(145, 20);
             this.textBoxPumpTime.TabIndex = 22;
             // 
             // textBoxLog
             // 
-            this.textBoxLog.Location = new System.Drawing.Point(1272, 170);
-            this.textBoxLog.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxLog.Location = new System.Drawing.Point(954, 138);
+            this.textBoxLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
-            this.textBoxLog.Size = new System.Drawing.Size(221, 242);
+            this.textBoxLog.Size = new System.Drawing.Size(167, 197);
             this.textBoxLog.TabIndex = 39;
             // 
             // tabControl3
             // 
             this.tabControl3.Controls.Add(this.tabPage5);
             this.tabControl3.Controls.Add(this.tabPage6);
-            this.tabControl3.Location = new System.Drawing.Point(484, 0);
-            this.tabControl3.Margin = new System.Windows.Forms.Padding(4);
+            this.tabControl3.Location = new System.Drawing.Point(363, 0);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(11, 10);
+            this.tabControl3.Size = new System.Drawing.Size(8, 8);
             this.tabControl3.TabIndex = 2;
             // 
             // tabPage5
             // 
-            this.tabPage5.Location = new System.Drawing.Point(4, 25);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage5.Size = new System.Drawing.Size(3, 0);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage5.Size = new System.Drawing.Size(0, 0);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "tabPage5";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // tabPage6
             // 
-            this.tabPage6.Location = new System.Drawing.Point(4, 25);
-            this.tabPage6.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage6.Size = new System.Drawing.Size(3, 0);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage6.Size = new System.Drawing.Size(0, 0);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // dataPathBox
-            // 
-            this.dataPathBox.Location = new System.Drawing.Point(877, 191);
-            this.dataPathBox.Margin = new System.Windows.Forms.Padding(4);
-            this.dataPathBox.Multiline = true;
-            this.dataPathBox.Name = "dataPathBox";
-            this.dataPathBox.Size = new System.Drawing.Size(206, 67);
-            this.dataPathBox.TabIndex = 41;
-            this.dataPathBox.Text = "C:\\Users\\Isaac\\Documents\\Studium\\SensUs\\Data\\SensUsGui";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(874, 171);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(66, 16);
-            this.label4.TabIndex = 42;
-            this.label4.Text = "Data Path";
-            // 
-            // saveDataBut
-            // 
-            this.saveDataBut.Location = new System.Drawing.Point(513, 124);
-            this.saveDataBut.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.saveDataBut.Name = "saveDataBut";
-            this.saveDataBut.Size = new System.Drawing.Size(96, 32);
-            this.saveDataBut.TabIndex = 40;
-            this.saveDataBut.Text = "Save Data";
-            this.saveDataBut.UseVisualStyleBackColor = true;
-            this.saveDataBut.Click += new System.EventHandler(this.saveDataBut_Click);
-            // 
-            // fileNameBox
-            // 
-            this.fileNameBox.Location = new System.Drawing.Point(877, 285);
-            this.fileNameBox.Margin = new System.Windows.Forms.Padding(4);
-            this.fileNameBox.Multiline = true;
-            this.fileNameBox.Name = "fileNameBox";
-            this.fileNameBox.Size = new System.Drawing.Size(206, 67);
-            this.fileNameBox.TabIndex = 43;
-            this.fileNameBox.Text = "Measurement ";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(874, 265);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(69, 16);
-            this.label10.TabIndex = 44;
-            this.label10.Text = "File Name";
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1509, 849);
+            this.ClientSize = new System.Drawing.Size(1132, 690);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.tabControl3);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);

@@ -26,7 +26,7 @@ namespace Biosensor_GUI
 
             textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
 
-           refrBut_Click(this, EventArgs.Empty);
+            refreshBtn_Click(this, EventArgs.Empty);
             // init plot
             InitializePlot();
         }
@@ -71,6 +71,7 @@ namespace Biosensor_GUI
 
         private bool ConfigSuccess()
         {
+            // TODO: implement a timeout in addition to waiting indefinitely for the configSuccess to change
             bool configSuccessTemp = false;
             while (configSuccess == -1) // wait until the config success bool was sent from the uC and read from the serialPort
             {
@@ -133,7 +134,7 @@ namespace Biosensor_GUI
             {
                 try
                 {
-                    serialPort.Write(new byte[] { CommandSet.START_MEAS }, 0, 1);
+                    serialPort.Write(new byte[] { CommandSet.START_MEAS_CONST }, 0, 1);
                     textBoxLog.AppendText("START cmd sent" + Environment.NewLine);
 
                     //enable or disable buttons
@@ -150,6 +151,7 @@ namespace Biosensor_GUI
             }
 
             //wait 10s
+                // => use a Timer for countdown
             //try --> write StopCommand
             // save Data 
             //update UI
@@ -225,16 +227,13 @@ namespace Biosensor_GUI
                         byte[] intBytes = BitConverter.GetBytes(voltageInt);
 
                         // set voltage (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE }, 0, 1);
+                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_STEP }, 0, 1);
                         serialPort.Write(intBytes, 0, intBytes.Length);
 
+                        logText = "Voltage set failed";
                         if (ConfigSuccess())
                         {
                             logText = "Voltage set to " + voltageStr + " mV";
-                        }
-                        else
-                        {
-                            logText = "Voltage set failed";
                         }
                         textBoxLog.AppendText(logText + Environment.NewLine);
                     }
@@ -245,39 +244,14 @@ namespace Biosensor_GUI
 
                     // set duration
                     string voltageDurationStr = textBoxVoltageDuration.Text;
-                    if (Int32.TryParse(voltageDurationStr, out int voltageDurationInt))
-                    {
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(voltageDurationInt);
-
-                        // set voltage duration (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_DUR }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        if (ConfigSuccess())
-                        {
-                            logText = "Voltage duration set to " + voltageDurationStr + " mV";
-                        }
-                        else
-                        {
-                            logText = "Voltage duration set failed";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid integers within the correct range.");
-                    }
+                    
 
                     // stop config
                     serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                    logText = "Stop parameter config failed";
                     if (ConfigSuccess())
                     {
                         logText = "Stopped parameter config";
-                    }
-                    else
-                    {
-                        logText = "Stop parameter config failed";
                     }
                     textBoxLog.AppendText(logText + Environment.NewLine);
 
