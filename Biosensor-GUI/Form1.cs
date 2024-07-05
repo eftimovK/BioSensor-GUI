@@ -130,31 +130,69 @@ namespace Biosensor_GUI
          */
         private void startMeasBtn_Click(object sender, EventArgs e)
         {
-            if (serialPort != null && serialPort.IsOpen)
-            {
+            //if (serialPort != null && serialPort.IsOpen)
+            //{
+                // check which measurement type is selected and send the corresponding cmd
+                byte measType;
+                bool continuousMeasurement; // store whether corresponding meas. is continuous or fixed duration
+                string measDurationStr;
+                if (radioBtnConstV.Checked)
+                {
+                    measType = CommandSet.START_MEAS_CONST;
+                    continuousMeasurement = checkBoxConstMeas.Checked;
+                    measDurationStr = textBoxConstVDur.Text;
+                }
+                else if (radioBtnCV.Checked)
+                {
+                    measType = CommandSet.START_MEAS_CV;
+                    continuousMeasurement = checkBoxCVMeas.Checked;
+                    measDurationStr = textBoxCVDur.Text;
+                }
+                else // no measurement was selected => return
+                {
+                    MessageBox.Show("Select a measurement type (excitation signal) before clicking start.");
+                    return;
+                }
+                
+                int measDuration;
+                if ((Int32.TryParse(measDurationStr, out measDuration) == false) && !continuousMeasurement)
+                {
+                    MessageBox.Show("Could not read the measurement duration as integer. Check settings in the config tab.");
+                    return;
+                }
+
                 try
                 {
-                    serialPort.Write(new byte[] { CommandSet.START_MEAS_CONST }, 0, 1);
+                    serialPort.Write(new byte[] {measType}, 0, 1);
                     textBoxLog.AppendText("START cmd sent" + Environment.NewLine);
 
                     //enable or disable buttons
-                    //startMeasBtn.Enabled = false;
+                    startMeasBtn.Enabled = false;
+                    if (continuousMeasurement)
+                    {
+                        // then measurement needs to be stopped manually
+                        stopMeasBtn.Enabled = true;
+                    }
+                    else
+                    {
+                        // measurement stop based on the duration
+
+                        //wait 10s
+                        // => use a Timer for countdown
+                        //try --> write StopCommand
+                        // save Data 
+                        //update UI
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            //wait 10s
-                // => use a Timer for countdown
-            //try --> write StopCommand
-            // save Data 
-            //update UI
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         //Select Com through selection box --> search for and select available Ports
@@ -243,8 +281,7 @@ namespace Biosensor_GUI
                     }
 
                     // set duration
-                    string voltageDurationStr = textBoxConstMeasDur.Text;
-                    
+                    string voltageDurationStr = textBoxConstVDur.Text;
 
                     // stop config
                     serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);

@@ -29,20 +29,26 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageMeasure = new System.Windows.Forms.TabPage();
+            this.stopMeasBtn = new System.Windows.Forms.Button();
             this.saveDataBut = new System.Windows.Forms.Button();
             this.startFluidBtn = new System.Windows.Forms.Button();
             this.chartPlot = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.startMeasBtn = new System.Windows.Forms.Button();
+            this.groupBoxSignalType = new System.Windows.Forms.GroupBox();
+            this.radioBtnConstV = new System.Windows.Forms.RadioButton();
+            this.radioBtnCV = new System.Windows.Forms.RadioButton();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
+            this.textBoxCVDur = new System.Windows.Forms.TextBox();
             this.checkBoxCVMeas = new System.Windows.Forms.CheckBox();
             this.checkBoxConstMeas = new System.Windows.Forms.CheckBox();
             this.label13 = new System.Windows.Forms.Label();
@@ -64,7 +70,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.textBoxConstVoltage = new System.Windows.Forms.TextBox();
-            this.textBoxConstMeasDur = new System.Windows.Forms.TextBox();
+            this.textBoxConstVDur = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.fluidParamBtn = new System.Windows.Forms.Button();
             this.textBoxPumpPressure = new System.Windows.Forms.TextBox();
@@ -76,17 +82,13 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.groupBoxSignalType = new System.Windows.Forms.GroupBox();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPageMeasure.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartPlot)).BeginInit();
+            this.groupBoxSignalType.SuspendLayout();
             this.tabPageConfig.SuspendLayout();
             this.tabControl3.SuspendLayout();
-            this.groupBoxSignalType.SuspendLayout();
             this.SuspendLayout();
             // 
             // serialPort
@@ -101,7 +103,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(465, 301);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(6, 6);
@@ -110,9 +112,9 @@
             // tabPage1
             // 
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(0, 0);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
@@ -121,9 +123,9 @@
             // tabPage2
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(0, 0);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
@@ -134,7 +136,7 @@
             this.tabControl2.Controls.Add(this.tabPageMeasure);
             this.tabControl2.Controls.Add(this.tabPageConfig);
             this.tabControl2.Location = new System.Drawing.Point(10, 0);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl2.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(927, 671);
@@ -142,25 +144,36 @@
             // 
             // tabPageMeasure
             // 
-            this.tabPageMeasure.Controls.Add(this.button1);
+            this.tabPageMeasure.Controls.Add(this.stopMeasBtn);
             this.tabPageMeasure.Controls.Add(this.saveDataBut);
             this.tabPageMeasure.Controls.Add(this.startFluidBtn);
             this.tabPageMeasure.Controls.Add(this.chartPlot);
             this.tabPageMeasure.Controls.Add(this.startMeasBtn);
             this.tabPageMeasure.Controls.Add(this.groupBoxSignalType);
             this.tabPageMeasure.Location = new System.Drawing.Point(4, 22);
-            this.tabPageMeasure.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageMeasure.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageMeasure.Name = "tabPageMeasure";
-            this.tabPageMeasure.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageMeasure.Padding = new System.Windows.Forms.Padding(2);
             this.tabPageMeasure.Size = new System.Drawing.Size(919, 645);
             this.tabPageMeasure.TabIndex = 0;
             this.tabPageMeasure.Text = "Measure";
             this.tabPageMeasure.UseVisualStyleBackColor = true;
             // 
+            // stopMeasBtn
+            // 
+            this.stopMeasBtn.Enabled = false;
+            this.stopMeasBtn.Location = new System.Drawing.Point(384, 22);
+            this.stopMeasBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.stopMeasBtn.Name = "stopMeasBtn";
+            this.stopMeasBtn.Size = new System.Drawing.Size(72, 26);
+            this.stopMeasBtn.TabIndex = 41;
+            this.stopMeasBtn.Text = "STOP";
+            this.stopMeasBtn.UseVisualStyleBackColor = true;
+            // 
             // saveDataBut
             // 
             this.saveDataBut.Location = new System.Drawing.Point(384, 77);
-            this.saveDataBut.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.saveDataBut.Margin = new System.Windows.Forms.Padding(2);
             this.saveDataBut.Name = "saveDataBut";
             this.saveDataBut.Size = new System.Drawing.Size(72, 26);
             this.saveDataBut.TabIndex = 40;
@@ -172,7 +185,7 @@
             // 
             this.startFluidBtn.Enabled = false;
             this.startFluidBtn.Location = new System.Drawing.Point(710, 40);
-            this.startFluidBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.startFluidBtn.Margin = new System.Windows.Forms.Padding(2);
             this.startFluidBtn.Name = "startFluidBtn";
             this.startFluidBtn.Size = new System.Drawing.Size(138, 44);
             this.startFluidBtn.TabIndex = 24;
@@ -181,22 +194,22 @@
             // 
             // chartPlot
             // 
-            chartArea3.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea3.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea3.BackColor = System.Drawing.Color.White;
-            chartArea3.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend3);
+            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea2.BackColor = System.Drawing.Color.White;
+            chartArea2.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend2);
             this.chartPlot.Location = new System.Drawing.Point(20, 116);
-            this.chartPlot.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chartPlot.Margin = new System.Windows.Forms.Padding(2);
             this.chartPlot.Name = "chartPlot";
-            series3.BorderWidth = 3;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Data Received";
-            this.chartPlot.Series.Add(series3);
+            series2.BorderWidth = 3;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Data Received";
+            this.chartPlot.Series.Add(series2);
             this.chartPlot.Size = new System.Drawing.Size(856, 481);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -204,7 +217,7 @@
             // startMeasBtn
             // 
             this.startMeasBtn.Location = new System.Drawing.Point(198, 32);
-            this.startMeasBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.startMeasBtn.Margin = new System.Windows.Forms.Padding(2);
             this.startMeasBtn.Name = "startMeasBtn";
             this.startMeasBtn.Size = new System.Drawing.Size(158, 61);
             this.startMeasBtn.TabIndex = 0;
@@ -212,8 +225,43 @@
             this.startMeasBtn.UseVisualStyleBackColor = true;
             this.startMeasBtn.Click += new System.EventHandler(this.startMeasBtn_Click);
             // 
+            // groupBoxSignalType
+            // 
+            this.groupBoxSignalType.Controls.Add(this.radioBtnConstV);
+            this.groupBoxSignalType.Controls.Add(this.radioBtnCV);
+            this.groupBoxSignalType.Location = new System.Drawing.Point(20, 22);
+            this.groupBoxSignalType.Name = "groupBoxSignalType";
+            this.groupBoxSignalType.Size = new System.Drawing.Size(152, 89);
+            this.groupBoxSignalType.TabIndex = 45;
+            this.groupBoxSignalType.TabStop = false;
+            this.groupBoxSignalType.Text = "Excitation Signal";
+            // 
+            // radioBtnConstV
+            // 
+            this.radioBtnConstV.AutoSize = true;
+            this.radioBtnConstV.Location = new System.Drawing.Point(18, 32);
+            this.radioBtnConstV.Name = "radioBtnConstV";
+            this.radioBtnConstV.Size = new System.Drawing.Size(89, 17);
+            this.radioBtnConstV.TabIndex = 46;
+            this.radioBtnConstV.TabStop = true;
+            this.radioBtnConstV.Text = "const voltage";
+            this.radioBtnConstV.UseVisualStyleBackColor = true;
+            // 
+            // radioBtnCV
+            // 
+            this.radioBtnCV.AutoSize = true;
+            this.radioBtnCV.Location = new System.Drawing.Point(18, 57);
+            this.radioBtnCV.Name = "radioBtnCV";
+            this.radioBtnCV.Size = new System.Drawing.Size(111, 17);
+            this.radioBtnCV.TabIndex = 0;
+            this.radioBtnCV.TabStop = true;
+            this.radioBtnCV.Text = "cyclic voltammetry";
+            this.radioBtnCV.UseVisualStyleBackColor = true;
+            // 
             // tabPageConfig
             // 
+            this.tabPageConfig.Controls.Add(this.label14);
+            this.tabPageConfig.Controls.Add(this.textBoxCVDur);
             this.tabPageConfig.Controls.Add(this.checkBoxCVMeas);
             this.tabPageConfig.Controls.Add(this.checkBoxConstMeas);
             this.tabPageConfig.Controls.Add(this.label13);
@@ -235,7 +283,7 @@
             this.tabPageConfig.Controls.Add(this.label7);
             this.tabPageConfig.Controls.Add(this.label6);
             this.tabPageConfig.Controls.Add(this.textBoxConstVoltage);
-            this.tabPageConfig.Controls.Add(this.textBoxConstMeasDur);
+            this.tabPageConfig.Controls.Add(this.textBoxConstVDur);
             this.tabPageConfig.Controls.Add(this.label1);
             this.tabPageConfig.Controls.Add(this.fluidParamBtn);
             this.tabPageConfig.Controls.Add(this.textBoxPumpPressure);
@@ -244,18 +292,36 @@
             this.tabPageConfig.Controls.Add(this.label2);
             this.tabPageConfig.Controls.Add(this.textBoxPumpTime);
             this.tabPageConfig.Location = new System.Drawing.Point(4, 22);
-            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageConfig.Name = "tabPageConfig";
-            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(2);
             this.tabPageConfig.Size = new System.Drawing.Size(919, 645);
             this.tabPageConfig.TabIndex = 1;
             this.tabPageConfig.Text = "Config";
             this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(518, 169);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(61, 13);
+            this.label14.TabIndex = 57;
+            this.label14.Text = "Duration [s]";
+            // 
+            // textBoxCVDur
+            // 
+            this.textBoxCVDur.Location = new System.Drawing.Point(354, 162);
+            this.textBoxCVDur.Name = "textBoxCVDur";
+            this.textBoxCVDur.Size = new System.Drawing.Size(145, 20);
+            this.textBoxCVDur.TabIndex = 56;
+            this.textBoxCVDur.Text = "10";
+            this.textBoxCVDur.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // checkBoxCVMeas
             // 
             this.checkBoxCVMeas.AutoSize = true;
-            this.checkBoxCVMeas.Location = new System.Drawing.Point(387, 184);
+            this.checkBoxCVMeas.Location = new System.Drawing.Point(386, 224);
             this.checkBoxCVMeas.Name = "checkBoxCVMeas";
             this.checkBoxCVMeas.Size = new System.Drawing.Size(87, 17);
             this.checkBoxCVMeas.TabIndex = 55;
@@ -292,8 +358,8 @@
             // 
             // cvMeasParamBtn
             // 
-            this.cvMeasParamBtn.Location = new System.Drawing.Point(362, 223);
-            this.cvMeasParamBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cvMeasParamBtn.Location = new System.Drawing.Point(361, 263);
+            this.cvMeasParamBtn.Margin = new System.Windows.Forms.Padding(2);
             this.cvMeasParamBtn.Name = "cvMeasParamBtn";
             this.cvMeasParamBtn.Size = new System.Drawing.Size(129, 74);
             this.cvMeasParamBtn.TabIndex = 51;
@@ -312,7 +378,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(518, 159);
+            this.label11.Location = new System.Drawing.Point(517, 199);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(91, 26);
             this.label11.TabIndex = 49;
@@ -329,7 +395,7 @@
             // 
             // textBoxCVSlopeDur
             // 
-            this.textBoxCVSlopeDur.Location = new System.Drawing.Point(354, 155);
+            this.textBoxCVSlopeDur.Location = new System.Drawing.Point(353, 195);
             this.textBoxCVSlopeDur.Name = "textBoxCVSlopeDur";
             this.textBoxCVSlopeDur.Size = new System.Drawing.Size(145, 20);
             this.textBoxCVSlopeDur.TabIndex = 47;
@@ -395,7 +461,7 @@
             // 
             this.comSelBox.FormattingEnabled = true;
             this.comSelBox.Location = new System.Drawing.Point(656, 69);
-            this.comSelBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comSelBox.Margin = new System.Windows.Forms.Padding(2);
             this.comSelBox.Name = "comSelBox";
             this.comSelBox.Size = new System.Drawing.Size(138, 21);
             this.comSelBox.TabIndex = 40;
@@ -404,7 +470,7 @@
             // refreshBtn
             // 
             this.refreshBtn.Location = new System.Drawing.Point(807, 65);
-            this.refreshBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.refreshBtn.Margin = new System.Windows.Forms.Padding(2);
             this.refreshBtn.Name = "refreshBtn";
             this.refreshBtn.Size = new System.Drawing.Size(72, 26);
             this.refreshBtn.TabIndex = 39;
@@ -415,7 +481,7 @@
             // constMeasParamBtn
             // 
             this.constMeasParamBtn.Location = new System.Drawing.Point(63, 184);
-            this.constMeasParamBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.constMeasParamBtn.Margin = new System.Windows.Forms.Padding(2);
             this.constMeasParamBtn.Name = "constMeasParamBtn";
             this.constMeasParamBtn.Size = new System.Drawing.Size(129, 74);
             this.constMeasParamBtn.TabIndex = 37;
@@ -450,14 +516,14 @@
             this.textBoxConstVoltage.Text = "0";
             this.textBoxConstVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // textBoxConstMeasDur
+            // textBoxConstVDur
             // 
-            this.textBoxConstMeasDur.Location = new System.Drawing.Point(56, 121);
-            this.textBoxConstMeasDur.Name = "textBoxConstMeasDur";
-            this.textBoxConstMeasDur.Size = new System.Drawing.Size(145, 20);
-            this.textBoxConstMeasDur.TabIndex = 30;
-            this.textBoxConstMeasDur.Text = "10";
-            this.textBoxConstMeasDur.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxConstVDur.Location = new System.Drawing.Point(56, 121);
+            this.textBoxConstVDur.Name = "textBoxConstVDur";
+            this.textBoxConstVDur.Size = new System.Drawing.Size(145, 20);
+            this.textBoxConstVDur.TabIndex = 30;
+            this.textBoxConstVDur.Text = "10";
+            this.textBoxConstVDur.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
@@ -473,7 +539,7 @@
             // 
             this.fluidParamBtn.Enabled = false;
             this.fluidParamBtn.Location = new System.Drawing.Point(64, 495);
-            this.fluidParamBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.fluidParamBtn.Margin = new System.Windows.Forms.Padding(2);
             this.fluidParamBtn.Name = "fluidParamBtn";
             this.fluidParamBtn.Size = new System.Drawing.Size(128, 74);
             this.fluidParamBtn.TabIndex = 27;
@@ -530,7 +596,7 @@
             // textBoxLog
             // 
             this.textBoxLog.Location = new System.Drawing.Point(954, 138);
-            this.textBoxLog.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxLog.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxLog.Multiline = true;
             this.textBoxLog.Name = "textBoxLog";
             this.textBoxLog.Size = new System.Drawing.Size(168, 197);
@@ -550,7 +616,7 @@
             // 
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(0, 0);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "tabPage5";
@@ -560,54 +626,11 @@
             // 
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(0, 0);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(384, 22);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(72, 26);
-            this.button1.TabIndex = 41;
-            this.button1.Text = "STOP";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // groupBoxSignalType
-            // 
-            this.groupBoxSignalType.Controls.Add(this.radioButton3);
-            this.groupBoxSignalType.Controls.Add(this.radioButton2);
-            this.groupBoxSignalType.Location = new System.Drawing.Point(20, 22);
-            this.groupBoxSignalType.Name = "groupBoxSignalType";
-            this.groupBoxSignalType.Size = new System.Drawing.Size(152, 89);
-            this.groupBoxSignalType.TabIndex = 45;
-            this.groupBoxSignalType.TabStop = false;
-            this.groupBoxSignalType.Text = "Excitation Signal";
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(18, 57);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(111, 17);
-            this.radioButton2.TabIndex = 0;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "cyclic voltammetry";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(18, 32);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(89, 17);
-            this.radioButton3.TabIndex = 46;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "const voltage";
-            this.radioButton3.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -624,11 +647,11 @@
             this.tabControl2.ResumeLayout(false);
             this.tabPageMeasure.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chartPlot)).EndInit();
+            this.groupBoxSignalType.ResumeLayout(false);
+            this.groupBoxSignalType.PerformLayout();
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
             this.tabControl3.ResumeLayout(false);
-            this.groupBoxSignalType.ResumeLayout(false);
-            this.groupBoxSignalType.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -659,7 +682,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBoxConstVoltage;
-        private System.Windows.Forms.TextBox textBoxConstMeasDur;
+        private System.Windows.Forms.TextBox textBoxConstVDur;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comSelBox;
         private System.Windows.Forms.Button refreshBtn;
@@ -680,10 +703,12 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.CheckBox checkBoxCVMeas;
         private System.Windows.Forms.CheckBox checkBoxConstMeas;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button stopMeasBtn;
         private System.Windows.Forms.GroupBox groupBoxSignalType;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioBtnConstV;
+        private System.Windows.Forms.RadioButton radioBtnCV;
+        private System.Windows.Forms.TextBox textBoxCVDur;
+        private System.Windows.Forms.Label label14;
     }
 }
 
