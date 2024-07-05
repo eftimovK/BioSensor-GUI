@@ -220,7 +220,7 @@ namespace Biosensor_GUI
                     textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
 
                     // set voltage
-                    string voltageStr = textBoxVoltage.Text;
+                    string voltageStr = textBoxConstVoltage.Text;
                     if (Int32.TryParse(voltageStr, out int voltageInt))
                     {
                         // Convert Int32 to byte array
@@ -243,7 +243,7 @@ namespace Biosensor_GUI
                     }
 
                     // set duration
-                    string voltageDurationStr = textBoxVoltageDuration.Text;
+                    string voltageDurationStr = textBoxConstMeasDur.Text;
                     
 
                     // stop config
