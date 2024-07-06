@@ -19,6 +19,7 @@ namespace Biosensor_GUI
         List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
         bool readConfigData = false;                // marks whether the data received refers to the config cmds
         int configSuccess = -1;                     // -1 denotes that no return value (0 or 1) was read from the port
+        private Timer stopMeasTimer;
 
         public Form1()
         {
@@ -29,6 +30,13 @@ namespace Biosensor_GUI
             refreshBtn_Click(this, EventArgs.Empty);
             // init plot
             InitializePlot();
+            InitializeTimer();
+        }
+        private void InitializeTimer()
+        {
+            stopMeasTimer = new Timer();
+            // stopMeasTimer.Interval = 10; // placeholder
+            stopMeasTimer.Tick += stopMeasTimerFcn;
         }
         private void InitializePlot()
         {
@@ -130,12 +138,12 @@ namespace Biosensor_GUI
          */
         private void startMeasBtn_Click(object sender, EventArgs e)
         {
-            //if (serialPort != null && serialPort.IsOpen)
-            //{
+            if (serialPort != null && serialPort.IsOpen)
+            {
                 // check which measurement type is selected and send the corresponding cmd
                 byte measType;
                 bool continuousMeasurement; // store whether corresponding meas. is continuous or fixed duration
-                string measDurationStr;
+                string measDurationStr;   // obtain from the textBox [s]
                 if (radioBtnConstV.Checked)
                 {
                     measType = CommandSet.START_MEAS_CONST;
@@ -154,10 +162,10 @@ namespace Biosensor_GUI
                     return;
                 }
                 
-                int measDuration;
-                if ((Int32.TryParse(measDurationStr, out measDuration) == false) && !continuousMeasurement)
+                float measDuration;
+                if ((float.TryParse(measDurationStr, out measDuration) == false) && !continuousMeasurement)
                 {
-                    MessageBox.Show("Could not read the measurement duration as integer. Check settings in the config tab.");
+                    MessageBox.Show("Could not read the measurement duration as a decimal number. Check settings in the config tab.");
                     return;
                 }
 
@@ -172,27 +180,35 @@ namespace Biosensor_GUI
                     {
                         // then measurement needs to be stopped manually
                         stopMeasBtn.Enabled = true;
+                        textBoxLog.AppendText("Continuous measurement... \n\t=> stop manually" + Environment.NewLine);
                     }
                     else
                     {
                         // measurement stop based on the duration
-
-                        //wait 10s
-                        // => use a Timer for countdown
-                        //try --> write StopCommand
-                        // save Data 
-                        //update UI
+                        stopMeasTimer.Interval = (int)(measDuration*1000);
+                        stopMeasTimer.Start();
+                        textBoxLog.AppendText("Running for " + measDurationStr + " sec." + Environment.NewLine);
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+            }
+            else
+            {
+                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void stopMeasTimerFcn(object sender, EventArgs e)
+        {
+            stopMeasTimer.Stop();
+            // call stop button function
+            textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
+
+            // save Data ?
+            // update UI (buttons, etc.)
+            startMeasBtn.Enabled = true;
         }
 
         //Select Com through selection box --> search for and select available Ports
@@ -280,8 +296,7 @@ namespace Biosensor_GUI
                         MessageBox.Show("Invalid input. Please enter a valid integers within the correct range.");
                     }
 
-                    // set duration
-                    string voltageDurationStr = textBoxConstVDur.Text;
+                    // set duration not needed, as waiting is done in GUI, not on the uC
 
                     // stop config
                     serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
@@ -332,6 +347,34 @@ namespace Biosensor_GUI
             catch
             {
                 textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+            }
+        }
+
+        private void checkBoxConstMeas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxConstMeas.Checked)
+            {
+                textBoxConstVDur.Enabled = false;
+                labelConstVDur.Enabled = false;
+            }
+            else
+            {
+                textBoxConstVDur.Enabled = true;
+                labelConstVDur.Enabled = true;
+            }
+        }
+
+        private void checkBoxCVMeas_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxCVMeas.Checked)
+            {
+                textBoxCVDur.Enabled = false;
+                labelCVDur.Enabled = false;
+            }
+            else
+            {
+                textBoxCVDur.Enabled = true;
+                labelCVDur.Enabled = true;
             }
         }
     }

@@ -47,7 +47,7 @@
             this.radioBtnConstV = new System.Windows.Forms.RadioButton();
             this.radioBtnCV = new System.Windows.Forms.RadioButton();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
-            this.label14 = new System.Windows.Forms.Label();
+            this.labelCVDur = new System.Windows.Forms.Label();
             this.textBoxCVDur = new System.Windows.Forms.TextBox();
             this.checkBoxCVMeas = new System.Windows.Forms.CheckBox();
             this.checkBoxConstMeas = new System.Windows.Forms.CheckBox();
@@ -68,7 +68,7 @@
             this.refreshBtn = new System.Windows.Forms.Button();
             this.constMeasParamBtn = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
+            this.labelConstVDur = new System.Windows.Forms.Label();
             this.textBoxConstVoltage = new System.Windows.Forms.TextBox();
             this.textBoxConstVDur = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -260,7 +260,7 @@
             // 
             // tabPageConfig
             // 
-            this.tabPageConfig.Controls.Add(this.label14);
+            this.tabPageConfig.Controls.Add(this.labelCVDur);
             this.tabPageConfig.Controls.Add(this.textBoxCVDur);
             this.tabPageConfig.Controls.Add(this.checkBoxCVMeas);
             this.tabPageConfig.Controls.Add(this.checkBoxConstMeas);
@@ -281,7 +281,7 @@
             this.tabPageConfig.Controls.Add(this.refreshBtn);
             this.tabPageConfig.Controls.Add(this.constMeasParamBtn);
             this.tabPageConfig.Controls.Add(this.label7);
-            this.tabPageConfig.Controls.Add(this.label6);
+            this.tabPageConfig.Controls.Add(this.labelConstVDur);
             this.tabPageConfig.Controls.Add(this.textBoxConstVoltage);
             this.tabPageConfig.Controls.Add(this.textBoxConstVDur);
             this.tabPageConfig.Controls.Add(this.label1);
@@ -300,14 +300,14 @@
             this.tabPageConfig.Text = "Config";
             this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
-            // label14
+            // labelCVDur
             // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(518, 169);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(61, 13);
-            this.label14.TabIndex = 57;
-            this.label14.Text = "Duration [s]";
+            this.labelCVDur.AutoSize = true;
+            this.labelCVDur.Location = new System.Drawing.Point(518, 169);
+            this.labelCVDur.Name = "labelCVDur";
+            this.labelCVDur.Size = new System.Drawing.Size(61, 13);
+            this.labelCVDur.TabIndex = 57;
+            this.labelCVDur.Text = "Duration [s]";
             // 
             // textBoxCVDur
             // 
@@ -327,6 +327,7 @@
             this.checkBoxCVMeas.TabIndex = 55;
             this.checkBoxCVMeas.Text = "continuous ?";
             this.checkBoxCVMeas.UseVisualStyleBackColor = true;
+            this.checkBoxCVMeas.CheckedChanged += new System.EventHandler(this.checkBoxCVMeas_CheckedChanged);
             // 
             // checkBoxConstMeas
             // 
@@ -337,6 +338,7 @@
             this.checkBoxConstMeas.TabIndex = 54;
             this.checkBoxConstMeas.Text = "continuous ?";
             this.checkBoxConstMeas.UseVisualStyleBackColor = true;
+            this.checkBoxConstMeas.CheckedChanged += new System.EventHandler(this.checkBoxConstMeas_CheckedChanged);
             // 
             // label13
             // 
@@ -498,14 +500,14 @@
             this.label7.TabIndex = 35;
             this.label7.Text = "Voltage [mV]";
             // 
-            // label6
+            // labelConstVDur
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(218, 125);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(61, 13);
-            this.label6.TabIndex = 34;
-            this.label6.Text = "Duration [s]";
+            this.labelConstVDur.AutoSize = true;
+            this.labelConstVDur.Location = new System.Drawing.Point(218, 125);
+            this.labelConstVDur.Name = "labelConstVDur";
+            this.labelConstVDur.Size = new System.Drawing.Size(61, 13);
+            this.labelConstVDur.TabIndex = 34;
+            this.labelConstVDur.Text = "Duration [s]";
             // 
             // textBoxConstVoltage
             // 
@@ -680,7 +682,7 @@
         private System.Windows.Forms.TextBox textBoxPumpTime;
         private System.Windows.Forms.Button constMeasParamBtn;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelConstVDur;
         private System.Windows.Forms.TextBox textBoxConstVoltage;
         private System.Windows.Forms.TextBox textBoxConstVDur;
         private System.Windows.Forms.Label label1;
@@ -708,7 +710,7 @@
         private System.Windows.Forms.RadioButton radioBtnConstV;
         private System.Windows.Forms.RadioButton radioBtnCV;
         private System.Windows.Forms.TextBox textBoxCVDur;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label labelCVDur;
     }
 }
 
