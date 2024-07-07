@@ -180,15 +180,44 @@ namespace Biosensor_GUI
                     {
                         // then measurement needs to be stopped manually
                         stopMeasBtn.Enabled = true;
-                        textBoxLog.AppendText("Continuous measurement... \n\t=> stop manually" + Environment.NewLine);
+                        textBoxLog.AppendText("Continuous measurement..." + Environment.NewLine + "\t=> stop manually" + Environment.NewLine);
                     }
                     else
                     {
                         // measurement stop based on the duration
                         stopMeasTimer.Interval = (int)(measDuration*1000);
                         stopMeasTimer.Start();
-                        textBoxLog.AppendText("Running for " + measDurationStr + " sec." + Environment.NewLine);
+                        textBoxLog.AppendText("Running for " + measDuration.ToString() + " sec." + Environment.NewLine);
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        /*
+         * stops the selected measurement sequence that is running
+         */
+        private void stopMeasBtn_Click(object sender, EventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                try
+                {
+                    serialPort.Write(new byte[] { CommandSet.STOP_MEAS }, 0, 1);
+                    textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
+
+                    startMeasBtn.Enabled = true;
+                    stopMeasBtn.Enabled = false;
+
+                    // save Data ?
+                    // update UI ? (buttons, etc.)
                 }
                 catch (Exception ex)
                 {
@@ -203,12 +232,9 @@ namespace Biosensor_GUI
         private void stopMeasTimerFcn(object sender, EventArgs e)
         {
             stopMeasTimer.Stop();
+            
             // call stop button function
-            textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
-
-            // save Data ?
-            // update UI (buttons, etc.)
-            startMeasBtn.Enabled = true;
+            stopMeasBtn_Click(this, EventArgs.Empty);
         }
 
         //Select Com through selection box --> search for and select available Ports
