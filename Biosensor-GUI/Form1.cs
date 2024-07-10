@@ -319,10 +319,116 @@ namespace Biosensor_GUI
                     }
                     else
                     {
-                        MessageBox.Show("Invalid input. Please enter a valid integers within the correct range.");
+                        MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
                     }
 
                     // set duration not needed, as waiting is done in GUI, not on the uC
+
+                    // stop config
+                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                    logText = "Stop parameter config failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Stopped parameter config";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+
+                    readConfigData = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void cvMeasParamBtn_Click(object sender, EventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                try
+                {
+                    readConfigData = true;  // mark that incoming data refers to config cmd return values
+                    string logText = "";
+
+                    // start config
+                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                    // set voltage level 1
+                    string voltage1Str = textBoxCVVoltage1.Text;
+                    if (Int32.TryParse(voltage1Str, out int voltage1Int))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(voltage1Int);
+
+                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE1_CV }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Voltage set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Voltage set to " + voltage1Str + " mV";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid voltage 1 integer within the correct range.");
+                    }
+
+                    // set voltage level 2
+                    string voltage2Str = textBoxCVVoltage2.Text;
+                    if (Int32.TryParse(voltage2Str, out int voltage2Int))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(voltage2Int);
+
+                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE2_CV }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Voltage set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Voltage set to " + voltage2Str + " mV";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid voltage 2 integer within the correct range.");
+                    }
+
+                    // set slope duration
+                    string slopeDurStr = textBoxCVSlopeDur.Text;
+                    if (float.TryParse(slopeDurStr, out float slopeDurFloat))
+                    {
+                        // convert the float representing seconds [s] to int in microseconds [us]
+                        Int32 slopeDurInt = (Int32)(slopeDurFloat*1000000);
+
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(slopeDurInt);
+
+                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_SLOPE_TIME_CV }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Slope duration set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Slope duration set to " + slopeDurStr + " s";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid slope duration less than the maximum.");
+                    }
 
                     // stop config
                     serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
