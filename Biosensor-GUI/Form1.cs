@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Timers;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -19,7 +20,7 @@ namespace Biosensor_GUI
         List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
         bool readConfigData = false;                // marks whether the data received refers to the config cmds
         int configSuccess = -1;                     // -1 denotes that no return value (0 or 1) was read from the port
-        private Timer stopMeasTimer;
+        private System.Timers.Timer stopMeasTimer;
 
         public Form1()
         {
@@ -34,9 +35,10 @@ namespace Biosensor_GUI
         }
         private void InitializeTimer()
         {
-            stopMeasTimer = new Timer();
+            stopMeasTimer = new System.Timers.Timer();
+            stopMeasTimer.Elapsed += new ElapsedEventHandler(stopMeasTimerFcn);
             // stopMeasTimer.Interval = 10; // placeholder
-            stopMeasTimer.Tick += stopMeasTimerFcn;
+            //stopMeasTimer.Tick += stopMeasTimerFcn;
         }
         private void InitializePlot()
         {
@@ -232,9 +234,12 @@ namespace Biosensor_GUI
         private void stopMeasTimerFcn(object sender, EventArgs e)
         {
             stopMeasTimer.Stop();
-            
-            // call stop button function
-            stopMeasBtn_Click(this, EventArgs.Empty);
+
+            this.BeginInvoke(new Action(() =>
+            {
+                // call stop button function
+                stopMeasBtn_Click(this, EventArgs.Empty);
+            }));
         }
 
         //Select Com through selection box --> search for and select available Ports
@@ -260,7 +265,7 @@ namespace Biosensor_GUI
                         // reconnect if a new port was selected
                         serialPort.PortName = selectedPort;
                         serialPort.Open();
-                        textBoxLog.AppendText("Connexted to " + selectedPort + Environment.NewLine);
+                        textBoxLog.AppendText("Connected to " + selectedPort + Environment.NewLine);
                         comSelBox.BackColor = System.Drawing.Color.PaleGreen;
                     }
                 }
@@ -268,7 +273,7 @@ namespace Biosensor_GUI
                 {
                     serialPort.PortName = selectedPort;
                     serialPort.Open();
-                    textBoxLog.AppendText("Connexted to " + selectedPort + Environment.NewLine);
+                    textBoxLog.AppendText("Connected to " + selectedPort + Environment.NewLine);
                     comSelBox.BackColor = System.Drawing.Color.PaleGreen;
                 }
 
