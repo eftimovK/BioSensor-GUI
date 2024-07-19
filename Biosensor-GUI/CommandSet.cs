@@ -14,7 +14,7 @@ namespace Biosensor_GUI
         public static readonly byte START_CONFIG     = 5;   /*!< Enter parameter configuration */
         public static readonly byte STOP_CONFIG      = 6;
 
-        /* Pameters for configuration */
+        /* Parameters for configuration */
         public static readonly byte SET_VOLTAGE_STEP = 100;  /*!< Set voltage level for const excitation */
         public static readonly byte SET_VOLTAGE1_CV  = 101;  /*!< Set voltage level 1 for CV excitation */
         public static readonly byte SET_VOLTAGE2_CV  = 102;  /*!< Set voltage level 2 for CV excitation */

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TabPage tabPageInfo;
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.label6 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.richTextBoxElectrodePins = new System.Windows.Forms.RichTextBox();
@@ -86,11 +86,12 @@
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label14 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBoxElectrodePins = new System.Windows.Forms.PictureBox();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            tabPageInfo = new System.Windows.Forms.TabPage();
-            tabPageInfo.SuspendLayout();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.tabPageInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPageMeasure.SuspendLayout();
@@ -100,22 +101,24 @@
             this.tabControl3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPageInfo
             // 
-            tabPageInfo.Controls.Add(this.pictureBox1);
-            tabPageInfo.Controls.Add(this.label6);
-            tabPageInfo.Controls.Add(this.richTextBox1);
-            tabPageInfo.Controls.Add(this.richTextBoxElectrodePins);
-            tabPageInfo.Controls.Add(this.pictureBoxElectrodePins);
-            tabPageInfo.Location = new System.Drawing.Point(4, 26);
-            tabPageInfo.Name = "tabPageInfo";
-            tabPageInfo.Size = new System.Drawing.Size(1228, 796);
-            tabPageInfo.TabIndex = 2;
-            tabPageInfo.Text = "Info";
-            tabPageInfo.ToolTipText = "information and hints";
-            tabPageInfo.UseVisualStyleBackColor = true;
+            this.tabPageInfo.Controls.Add(this.label14);
+            this.tabPageInfo.Controls.Add(this.label6);
+            this.tabPageInfo.Controls.Add(this.richTextBox1);
+            this.tabPageInfo.Controls.Add(this.richTextBoxElectrodePins);
+            this.tabPageInfo.Controls.Add(this.pictureBox1);
+            this.tabPageInfo.Controls.Add(this.pictureBoxElectrodePins);
+            this.tabPageInfo.Location = new System.Drawing.Point(4, 26);
+            this.tabPageInfo.Name = "tabPageInfo";
+            this.tabPageInfo.Size = new System.Drawing.Size(1228, 796);
+            this.tabPageInfo.TabIndex = 2;
+            this.tabPageInfo.Text = "Info";
+            this.tabPageInfo.ToolTipText = "information and hints";
+            this.tabPageInfo.UseVisualStyleBackColor = true;
             // 
             // label6
             // 
@@ -131,7 +134,7 @@
             // 
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.Location = new System.Drawing.Point(42, 51);
+            this.richTextBox1.Location = new System.Drawing.Point(41, 75);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(485, 126);
             this.richTextBox1.TabIndex = 5;
@@ -195,7 +198,7 @@
             // 
             this.tabControl2.Controls.Add(this.tabPageMeasure);
             this.tabControl2.Controls.Add(this.tabPageConfig);
-            this.tabControl2.Controls.Add(tabPageInfo);
+            this.tabControl2.Controls.Add(this.tabPageInfo);
             this.tabControl2.ItemSize = new System.Drawing.Size(120, 22);
             this.tabControl2.Location = new System.Drawing.Point(13, 0);
             this.tabControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -330,6 +333,7 @@
             // 
             // tabPageConfig
             // 
+            this.tabPageConfig.Controls.Add(this.pictureBox2);
             this.tabPageConfig.Controls.Add(this.labelCVDur);
             this.tabPageConfig.Controls.Add(this.textBoxCVDur);
             this.tabPageConfig.Controls.Add(this.checkBoxCVMeas);
@@ -738,6 +742,16 @@
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(38, 34);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(182, 24);
+            this.label14.TabIndex = 7;
+            this.label14.Text = "Before measuring :";
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Biosensor_GUI.Properties.Resources.cv_signal;
@@ -758,6 +772,17 @@
             this.pictureBoxElectrodePins.TabIndex = 0;
             this.pictureBoxElectrodePins.TabStop = false;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::Biosensor_GUI.Properties.Resources.info_icon;
+            this.pictureBox2.Location = new System.Drawing.Point(659, 51);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(49, 45);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 58;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -770,8 +795,8 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
-            tabPageInfo.ResumeLayout(false);
-            tabPageInfo.PerformLayout();
+            this.tabPageInfo.ResumeLayout(false);
+            this.tabPageInfo.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPageMeasure.ResumeLayout(false);
@@ -783,6 +808,7 @@
             this.tabControl3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -846,6 +872,9 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.TabPage tabPageInfo;
     }
 }
 

@@ -37,8 +37,6 @@ namespace Biosensor_GUI
         {
             stopMeasTimer = new System.Timers.Timer();
             stopMeasTimer.Elapsed += new ElapsedEventHandler(stopMeasTimerFcn);
-            // stopMeasTimer.Interval = 10; // placeholder
-            //stopMeasTimer.Tick += stopMeasTimerFcn;
         }
         private void InitializePlot()
         {
@@ -297,6 +295,8 @@ namespace Biosensor_GUI
             {
                 try
                 {
+                    // TODO: check that the values from input fields are within the correct range!
+
                     readConfigData = true;  // mark that incoming data refers to config cmd return values
                     string logText = "";
 
@@ -356,6 +356,8 @@ namespace Biosensor_GUI
             {
                 try
                 {
+                    // TODO: check that the values from input fields are within the correct range!
+
                     readConfigData = true;  // mark that incoming data refers to config cmd return values
                     string logText = "";
 
@@ -513,6 +515,11 @@ namespace Biosensor_GUI
                 textBoxCVDur.Enabled = true;
                 labelCVDur.Enabled = true;
             }
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            tabControl2.SelectedTab = tabPageInfo;
         }
     }
 }

@@ -88,5 +88,8 @@
   <ItemGroup>
     <None Include="Resources\electrode_pins_marked.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info_icon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
