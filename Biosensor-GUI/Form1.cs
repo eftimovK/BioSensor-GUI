@@ -176,6 +176,9 @@ namespace Biosensor_GUI
 
                     //enable or disable buttons
                     startMeasBtn.Enabled = false;
+                    // do not allow configuration while measuring
+                    tabPageConfig.Enabled = false;
+
                     if (continuousMeasurement)
                     {
                         // then measurement needs to be stopped manually
@@ -215,6 +218,7 @@ namespace Biosensor_GUI
 
                     startMeasBtn.Enabled = true;
                     stopMeasBtn.Enabled = false;
+                    tabPageConfig.Enabled = true;
 
                     // save Data ?
                     // update UI ? (buttons, etc.)

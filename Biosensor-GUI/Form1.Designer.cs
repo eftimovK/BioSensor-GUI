@@ -29,13 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabPageInfo = new System.Windows.Forms.TabPage();
+            this.label14 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.richTextBoxElectrodePins = new System.Windows.Forms.RichTextBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxElectrodePins = new System.Windows.Forms.PictureBox();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -51,6 +54,7 @@
             this.radioBtnConstV = new System.Windows.Forms.RadioButton();
             this.radioBtnCV = new System.Windows.Forms.RadioButton();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.labelCVDur = new System.Windows.Forms.Label();
             this.textBoxCVDur = new System.Windows.Forms.TextBox();
             this.checkBoxCVMeas = new System.Windows.Forms.CheckBox();
@@ -87,21 +91,17 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label14 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxElectrodePins = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tabPageInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPageMeasure.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartPlot)).BeginInit();
             this.groupBoxSignalType.SuspendLayout();
             this.tabPageConfig.SuspendLayout();
-            this.tabControl3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.tabControl3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPageInfo
@@ -119,6 +119,16 @@
             this.tabPageInfo.Text = "Info";
             this.tabPageInfo.ToolTipText = "information and hints";
             this.tabPageInfo.UseVisualStyleBackColor = true;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(38, 34);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(182, 24);
+            this.label14.TabIndex = 7;
+            this.label14.Text = "Before measuring :";
             // 
             // label6
             // 
@@ -153,6 +163,26 @@
             this.richTextBoxElectrodePins.Text = "Hard-coded 4-wire electrode pins on microcontroller board:\n\n\tCE     == AFE7   (LK" +
     "7)\n\tREF+ == AFE6   (LK6)\n            REF- == AFE2   (LK2)\n            WE    == A" +
     "FE3   (LK3)";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Biosensor_GUI.Properties.Resources.cv_signal;
+            this.pictureBox1.Location = new System.Drawing.Point(42, 283);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(513, 399);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBoxElectrodePins
+            // 
+            this.pictureBoxElectrodePins.Image = global::Biosensor_GUI.Properties.Resources.electrode_pins_marked;
+            this.pictureBoxElectrodePins.Location = new System.Drawing.Point(733, 160);
+            this.pictureBoxElectrodePins.Name = "pictureBoxElectrodePins";
+            this.pictureBoxElectrodePins.Size = new System.Drawing.Size(472, 604);
+            this.pictureBoxElectrodePins.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxElectrodePins.TabIndex = 0;
+            this.pictureBoxElectrodePins.TabStop = false;
             // 
             // serialPort
             // 
@@ -263,22 +293,22 @@
             // 
             // chartPlot
             // 
-            chartArea8.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea8.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea8.BackColor = System.Drawing.Color.White;
-            chartArea8.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea8);
-            legend8.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend8);
+            chartArea4.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea4.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea4.BackColor = System.Drawing.Color.White;
+            chartArea4.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend4);
             this.chartPlot.Location = new System.Drawing.Point(27, 143);
             this.chartPlot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chartPlot.Name = "chartPlot";
-            series8.BorderWidth = 3;
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Legend = "Legend1";
-            series8.Name = "Data Received";
-            this.chartPlot.Series.Add(series8);
+            series4.BorderWidth = 3;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend1";
+            series4.Name = "Data Received";
+            this.chartPlot.Series.Add(series4);
             this.chartPlot.Size = new System.Drawing.Size(1141, 592);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -375,6 +405,18 @@
             this.tabPageConfig.ToolTipText = "configure parameters";
             this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::Biosensor_GUI.Properties.Resources.info_icon;
+            this.pictureBox2.Location = new System.Drawing.Point(659, 51);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(49, 45);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 58;
+            this.pictureBox2.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBox2, "parameter info");
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // labelCVDur
             // 
             this.labelCVDur.AutoSize = true;
@@ -394,6 +436,7 @@
             this.textBoxCVDur.TabIndex = 56;
             this.textBoxCVDur.Text = "10";
             this.textBoxCVDur.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.textBoxCVDur, "total measurement duration");
             // 
             // checkBoxCVMeas
             // 
@@ -615,6 +658,7 @@
             this.textBoxConstVoltage.TabIndex = 31;
             this.textBoxConstVoltage.Text = "0";
             this.textBoxConstVoltage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.textBoxConstVoltage, "from -800 to 800 mV");
             // 
             // textBoxConstVDur
             // 
@@ -625,6 +669,7 @@
             this.textBoxConstVDur.TabIndex = 30;
             this.textBoxConstVDur.Text = "10";
             this.textBoxConstVDur.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip1.SetToolTip(this.textBoxConstVDur, "total measurement duration");
             // 
             // label1
             // 
@@ -742,47 +787,6 @@
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(38, 34);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(182, 24);
-            this.label14.TabIndex = 7;
-            this.label14.Text = "Before measuring :";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Biosensor_GUI.Properties.Resources.cv_signal;
-            this.pictureBox1.Location = new System.Drawing.Point(42, 283);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(513, 399);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBoxElectrodePins
-            // 
-            this.pictureBoxElectrodePins.Image = global::Biosensor_GUI.Properties.Resources.electrode_pins_marked;
-            this.pictureBoxElectrodePins.Location = new System.Drawing.Point(733, 160);
-            this.pictureBoxElectrodePins.Name = "pictureBoxElectrodePins";
-            this.pictureBoxElectrodePins.Size = new System.Drawing.Size(472, 604);
-            this.pictureBoxElectrodePins.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxElectrodePins.TabIndex = 0;
-            this.pictureBoxElectrodePins.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::Biosensor_GUI.Properties.Resources.info_icon;
-            this.pictureBox2.Location = new System.Drawing.Point(659, 51);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(49, 45);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 58;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -797,6 +801,8 @@
             this.Text = "Form1";
             this.tabPageInfo.ResumeLayout(false);
             this.tabPageInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabControl2.ResumeLayout(false);
             this.tabPageMeasure.ResumeLayout(false);
@@ -805,10 +811,8 @@
             this.groupBoxSignalType.PerformLayout();
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
-            this.tabControl3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.tabControl3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
