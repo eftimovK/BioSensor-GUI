@@ -70,6 +70,8 @@ namespace Biosensor_GUI
             {
                 string data = serialPort.ReadLine();
 
+                // TODO: differentiate between measurement type in order to plot accordingly
+
                 this.BeginInvoke(new Action(() =>
                 {
                     updateUI(data);
@@ -156,6 +158,20 @@ namespace Biosensor_GUI
                     continuousMeasurement = checkBoxCVMeas.Checked;
                     measDurationStr = textBoxCVDur.Text;
                 }
+                else if (radioBtnEIS.Checked)
+                {
+                    measType = CommandSet.START_MEAS_EIS;
+                    continuousMeasurement = false;
+
+                    // Duration is hard-coded in the firmware atm ! 
+                    // AC excitation at each frequency lasts 0.5 seconds (+0.25s buffer?)
+                    measDurationStr = "x";
+                    if (Int32.TryParse(textBoxPointsEIS.Text, out int pointsEIS))
+                    {
+                        float tempDur = (float)(0.75* pointsEIS);
+                        measDurationStr = tempDur.ToString();
+                    }
+                }
                 else // no measurement was selected => return
                 {
                     MessageBox.Show("Select a measurement type (excitation signal) before clicking start.");
@@ -165,7 +181,7 @@ namespace Biosensor_GUI
                 float measDuration;
                 if ((float.TryParse(measDurationStr, out measDuration) == false) && !continuousMeasurement)
                 {
-                    MessageBox.Show("Could not read the measurement duration as a decimal number. Check settings in the config tab.");
+                    MessageBox.Show("Could not read the measurement duration as a decimal number or the number of points for EIS as an integer.\nCheck settings in the config tab.");
                     return;
                 }
 
@@ -178,6 +194,8 @@ namespace Biosensor_GUI
                     startMeasBtn.Enabled = false;
                     // do not allow configuration while measuring
                     tabPageConfig.Enabled = false;
+                    // do not allow changing the measurement type while measuring
+                    groupBoxSignalType.Enabled = false;
 
                     if (continuousMeasurement)
                     {
@@ -213,12 +231,16 @@ namespace Biosensor_GUI
             {
                 try
                 {
-                    serialPort.Write(new byte[] { CommandSet.STOP_MEAS }, 0, 1);
-                    textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
+                    if (radioBtnConstV.Checked || radioBtnCV.Checked)   // do not send STOP cmd for EIS measurement
+                    {
+                        serialPort.Write(new byte[] { CommandSet.STOP_MEAS }, 0, 1);
+                        textBoxLog.AppendText("STOP cmd sent" + Environment.NewLine);
+                    }
 
                     startMeasBtn.Enabled = true;
                     stopMeasBtn.Enabled = false;
                     tabPageConfig.Enabled = true;
+                    groupBoxSignalType.Enabled = true;
 
                     // save Data ?
                     // update UI ? (buttons, etc.)
@@ -425,7 +447,7 @@ namespace Biosensor_GUI
                         // Convert Int32 to byte array
                         byte[] intBytes = BitConverter.GetBytes(slopeDurInt);
 
-                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        // set slope time (1 byte as cmd ID + 4 bytes for the value)
                         serialPort.Write(new byte[] { CommandSet.SET_SLOPE_TIME_CV }, 0, 1);
                         serialPort.Write(intBytes, 0, intBytes.Length);
 
@@ -439,6 +461,138 @@ namespace Biosensor_GUI
                     else
                     {
                         MessageBox.Show("Invalid input. Please enter a valid slope duration less than the maximum.");
+                    }
+
+                    // stop config
+                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                    logText = "Stop parameter config failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Stopped parameter config";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+
+                    readConfigData = false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void eisMeasParamBtn_Click(object sender, EventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                try
+                {
+                    // TODO: check that the values from input fields are within the correct range!
+
+                    readConfigData = true;  // mark that incoming data refers to config cmd return values
+                    string logText = "";
+
+                    // start config
+                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                    // set AC voltage peak
+                    string voltageStr = textBoxEISVoltage.Text;
+                    if (Int32.TryParse(voltageStr, out int voltageInt))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(voltageInt);
+
+                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_EIS }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Voltage set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Voltage set to " + voltageStr + " mV";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
+                    }
+
+                    // set EIS start frequency
+                    string startFreqStr = textBoxStartFreqEIS.Text;
+                    if (Int32.TryParse(startFreqStr, out int startFreqInt))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(startFreqInt);
+
+                        // set frequency (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_START_FREQ_EIS }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Start frequency set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Start frequency set to " + startFreqStr + " Hz";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid start frequency in the correct range.");
+                    }
+                    // TODO: check that EIS stop frequency is larger than start frequency
+                    // set EIS stop frequency
+                    string stopFreqStr = textBoxStopFreqEIS.Text;
+                    if (Int32.TryParse(stopFreqStr, out int stopFreqInt))
+                    {
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(stopFreqInt);
+
+                        // set frequency (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_STOP_FREQ_EIS }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Stop frequency set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Stop frequency set to " + stopFreqStr + " Hz";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter a valid stop frequency in the correct range.");
+                    }
+                    
+                    // set number of frequency points (thereby the step frequency)
+                    string freqPointsStr = textBoxPointsEIS.Text;
+                    if (Int32.TryParse(freqPointsStr, out int freqPointsInt))
+                    {
+                        // get step frequency from the number of points
+                        Int32 stepFreqInt = (stopFreqInt - startFreqInt) / freqPointsInt;
+
+                        // Convert Int32 to byte array
+                        byte[] intBytes = BitConverter.GetBytes(stepFreqInt);
+
+                        // set frequency (1 byte as cmd ID + 4 bytes for the value)
+                        serialPort.Write(new byte[] { CommandSet.SET_STEP_FREQ_EIS }, 0, 1);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+
+                        logText = "Step frequency set failed";
+                        if (ConfigSuccess())
+                        {
+                            logText = "Step frequency set to " + stepFreqInt.ToString() + " Hz";
+                        }
+                        textBoxLog.AppendText(logText + Environment.NewLine);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid input. Please enter an integer number of frequency points.");
                     }
 
                     // stop config
