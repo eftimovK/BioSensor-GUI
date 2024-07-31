@@ -164,11 +164,11 @@ namespace Biosensor_GUI
                     continuousMeasurement = false;
 
                     // Duration is hard-coded in the firmware atm ! 
-                    // AC excitation at each frequency lasts 0.5 seconds (+0.25s buffer?)
+                    // AC excitation at each frequency lasts 1 seconds (+0.2s buffer?)
                     measDurationStr = "x";
                     if (Int32.TryParse(textBoxPointsEIS.Text, out int pointsEIS))
                     {
-                        float tempDur = (float)(0.75* pointsEIS);
+                        float tempDur = (float)(1.2* pointsEIS);
                         measDurationStr = tempDur.ToString();
                     }
                 }
@@ -502,8 +502,11 @@ namespace Biosensor_GUI
 
                     // set AC voltage peak
                     string voltageStr = textBoxEISVoltage.Text;
-                    if (Int32.TryParse(voltageStr, out int voltageInt))
+                    if (float.TryParse(voltageStr, out float voltageFloat))
                     {
+                        // convert the float representing milli [mV] to int in microvolts [uV]
+                        Int32 voltageInt = (Int32)(voltageFloat * 1000 + 0.5);
+
                         // Convert Int32 to byte array
                         byte[] intBytes = BitConverter.GetBytes(voltageInt);
 
