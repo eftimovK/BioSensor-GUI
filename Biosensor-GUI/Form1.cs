@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Biosensor_GUI
@@ -18,8 +20,12 @@ namespace Biosensor_GUI
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
         List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
         List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
+        List<double> xDataEIS = new List<double>();    // X-axis data for EIS (real part of measured impedance)
+        List<double> yDataEIS = new List<double>();    // Y-axis data for EIS (imaginary part of measured impedance)
+        List<int> freqDataEIS = new List<int>();    // frequencies for EIS, corresponding (index-wise) to the measured impedance
         bool readConfigData = false;                // marks whether the data received refers to the config cmds
         int configSuccess = -1;                     // -1 denotes that no return value (0 or 1) was read from the port
+        private const int calibrationResistor = 1000;   // [Ohm]
         private System.Timers.Timer stopMeasTimer;
 
         public Form1()
@@ -50,13 +56,56 @@ namespace Biosensor_GUI
             // add a point to the series to display the plot
             chartPlot.Series[0].Points.AddXY(0, 0); // address the first Series of the chart
         }
+        private void SetupPlot(byte measType)
+        {
+            /* const voltage setup:
+                it receives a single value representing the current over time, 
+                thus the x-axis display the past x amount of seconds.
+            */
+            /* CV setup:
+                it receives a single value representing the current over the applied voltage, 
+                which is swept between two values over multiple cycles. 
+                Thus, in best case, we plot a separate curve for each cycle & add it in the legend.
+            */
+
+            /* EIS setup:
+                it receives multiple values from which the real & imaginary part 
+                of the measured impedance can be plotted, on the x- & y-axis correspondingly.
+            */
+            if (measType == CommandSet.START_MEAS_EIS)
+            {
+                foreach (var series in chartPlot.Series)
+                {
+                    series.Points.Clear();
+                }
+
+                chartPlot.ChartAreas[0].AxisX.Minimum = 0;
+                chartPlot.ChartAreas[0].AxisX.Maximum = 10;
+                chartPlot.ChartAreas[0].AxisY.Minimum = 0;
+                chartPlot.ChartAreas[0].AxisY.Maximum = 10;
+
+                chartPlot.ChartAreas[0].AxisX.Title = "Re {Zx}";
+                chartPlot.ChartAreas[0].AxisY.Title = "Im {Zx}";
+            }
+        }
+        private void emptyRxBuffer()
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                while (serialPort.BytesToRead > 0)
+                {
+                    serialPort.ReadLine();
+                }
+            }
+        }
 
         /*
          * When receiving Data from the serial port than this command is executed
          */
         private void DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            // TODO: change approach => use an encoding for the data received
+            // TODO: use an encoding for the data received; 
+            //      => currently implemented for the measurement data received, but not for config return values
             
             if (readConfigData) // incoming data refers to config cmds
             {
@@ -69,8 +118,6 @@ namespace Biosensor_GUI
             else    // we receive data for plotting
             {
                 string data = serialPort.ReadLine();
-
-                // TODO: differentiate between measurement type in order to plot accordingly
 
                 this.BeginInvoke(new Action(() =>
                 {
@@ -99,13 +146,28 @@ namespace Biosensor_GUI
             //string receiveLog = "Started receiving data...";
             //textBoxLog.AppendText(receiveLog + Environment.NewLine);
 
-            // update plot
-            data = data.TrimEnd('\r', '\n');
-            int newValue;
-            bool res = Int32.TryParse(data, out newValue);
+            int dataIdx = 0;    // index of the next data to be read from the dataValues array
 
-            if (res)
+            // parse data string, resulting in 1 byte (for ID) and an array of integers (data values)
+            data = data.TrimEnd('\r', '\n');
+            string[] stringValues = data.Split(':');
+            int[] dataValues = new int[stringValues.Length];
+            for (int i = 0; i < stringValues.Length; i++)
             {
+                dataValues[i] = Convert.ToInt32(stringValues[i]);   // TODO: deal with stringValues that are not numbers
+            }
+
+            byte measurementID = Convert.ToByte(dataValues[dataIdx++]);
+
+            // update plot
+            if (measurementID == CommandSet.DATA_MEAS_CONST || measurementID == CommandSet.DATA_MEAS_CV)
+            {
+                /*  For this measurement we receive single values
+                    that represent current given as ADC code.
+                */
+                
+                int newValue = dataValues[dataIdx++];
+
                 dataRxCount++;
                 
                 chartPlot.Series[0].Points.AddY(newValue);
@@ -132,6 +194,67 @@ namespace Biosensor_GUI
 
                 chartPlot.ChartAreas[0].AxisY.Minimum = minLastValues - 100;
                 chartPlot.ChartAreas[0].AxisY.Maximum = maxLastValues + 100;
+            }
+            else if (measurementID == CommandSet.DATA_MEAS_EIS)
+            {
+                /*  For EIS we receive: 
+                    frequency
+                    Rcal - real part
+                    Rcal - imag part
+                    Zm (measured impedance) - real part
+                    Zm (measured impedance) - imag part
+                */
+
+                int frequency = dataValues[dataIdx++];
+                int Rcal_re   = dataValues[dataIdx++];
+                int Rcal_im   = dataValues[dataIdx++];
+                int Zm_re     = dataValues[dataIdx++];
+                int Zm_im     = dataValues[dataIdx++];
+
+                // calc magnitude & phase of Rcal
+                double Rcal_mag     = Math.Sqrt(Rcal_re*Rcal_re + Rcal_im*Rcal_im);
+                double Rcal_phase   = Math.Atan2(Rcal_im, Rcal_re);
+                // calc magnitude & phase of Zm
+                double Zm_mag       = Math.Sqrt(Zm_re*Zm_re + Zm_im*Zm_im);
+                double Zm_phase     = Math.Atan2(Zm_im, Zm_re);
+
+                // calc magniture & phase of unknown impedance Zx:= |Rcal|/|Zm| * calibrationResistor
+                double Zx_mag    = Rcal_mag/Zm_mag * calibrationResistor;
+                if (Zm_mag == 0)    // TODO: handle Zx_mag of infinity
+                {
+                    Zx_mag = 0;
+                }
+                double Zx_phase  = Zm_phase - Rcal_phase;
+
+                // for the plot we need Re(Zx) & Im(Zx), which we
+                // finally calculate from the magnitude and phase of Zx
+                double Zx_re = Math.Round(Zx_mag * Math.Cos(Zx_phase), 2, MidpointRounding.AwayFromZero);
+                double Zx_im = Math.Round(Zx_mag * Math.Sin(Zx_phase), 2, MidpointRounding.AwayFromZero);
+
+                // the real part is x-value
+                // the imag part is y-value
+                chartPlot.Series[0].Points.AddXY(Zx_re, Zx_im);
+
+                // set the y-axis limits within the min/max of the max values
+                if (Zx_re > chartPlot.ChartAreas[0].AxisX.Maximum) { 
+                    chartPlot.ChartAreas[0].AxisX.Maximum = Zx_re + 50;
+                }
+                if (Zx_re < chartPlot.ChartAreas[0].AxisX.Minimum) { 
+                    chartPlot.ChartAreas[0].AxisX.Minimum = Zx_re - 50;
+                }
+                if (Zx_im > chartPlot.ChartAreas[0].AxisY.Maximum) {
+                    chartPlot.ChartAreas[0].AxisY.Maximum = Zx_im + 50;
+                }
+                if (Zx_im < chartPlot.ChartAreas[0].AxisY.Minimum)
+                {
+                    chartPlot.ChartAreas[0].AxisY.Minimum = Zx_im - 50;
+                }
+
+                xDataEIS.Add(Zx_re);
+                yDataEIS.Add(Zx_im);
+                freqDataEIS.Add(frequency);
+
+                // how to plot/denote the frequency in the 2D Chart ? add annotation ?
             }
         }
 
@@ -189,6 +312,8 @@ namespace Biosensor_GUI
                 {
                     serialPort.Write(new byte[] {measType}, 0, 1);
                     textBoxLog.AppendText("START cmd sent" + Environment.NewLine);
+
+                    SetupPlot(measType);
 
                     //enable or disable buttons
                     startMeasBtn.Enabled = false;
@@ -326,6 +451,9 @@ namespace Biosensor_GUI
                     readConfigData = true;  // mark that incoming data refers to config cmd return values
                     string logText = "";
 
+                    // empty the receive buffer
+                    // emptyRxBuffer();
+
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
                     textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
@@ -386,6 +514,9 @@ namespace Biosensor_GUI
 
                     readConfigData = true;  // mark that incoming data refers to config cmd return values
                     string logText = "";
+
+                    // empty the receive buffer
+                    // emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
@@ -495,6 +626,9 @@ namespace Biosensor_GUI
 
                     readConfigData = true;  // mark that incoming data refers to config cmd return values
                     string logText = "";
+
+                    // empty the receive buffer
+                    // emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
@@ -624,6 +758,8 @@ namespace Biosensor_GUI
         {
             try
             {
+                // TODO: differentiate saving results from all measurement types
+
                 string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
 
                 //var writeDataX = string.Join(" ", dataPointsX);
