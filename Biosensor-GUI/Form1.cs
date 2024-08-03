@@ -18,8 +18,9 @@ namespace Biosensor_GUI
         private int measCounter = 1;
 
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
-        List<int> dataPointsX = new List<int>();    // X-axis data (time or sample number)
-        List<int> dataPointsY = new List<int>();    // Y-axis data (received values)
+        private int dataPointsPerSec = 1000;   // samples per second, determined by the sampling freq. on the uC
+        List<double> dataPointsX = new List<double>();    // X-axis data for const voltage excitation & CV (time in sec.)
+        List<double> dataPointsY = new List<double>();    // Y-axis data for const voltage excitation & CV (current in uA)
         List<double> xDataEIS = new List<double>();    // X-axis data for EIS (real part of measured impedance)
         List<double> yDataEIS = new List<double>();    // Y-axis data for EIS (imaginary part of measured impedance)
         List<int> freqDataEIS = new List<int>();    // frequencies for EIS, corresponding (index-wise) to the measured impedance
@@ -46,10 +47,12 @@ namespace Biosensor_GUI
         }
         private void InitializePlot()
         {
+            // do inital plot displaying a cool curve, or draw the Aixsense logo (animation)
+
             // initial chart config
 
             chartPlot.ChartAreas[0].AxisX.Minimum = 0;  // address the first ChartArea
-            chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax;
+            chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax / dataPointsPerSec;
             chartPlot.ChartAreas[0].AxisY.Minimum = 0;
             chartPlot.ChartAreas[0].AxisY.Maximum = 10;
 
@@ -58,15 +61,59 @@ namespace Biosensor_GUI
         }
         private void SetupPlot(byte measType)
         {
+            foreach (var series in chartPlot.Series)
+            {
+               series.Points.Clear();
+            }
+
             /* const voltage setup:
                 it receives a single value representing the current over time, 
                 thus the x-axis display the past x amount of seconds.
             */
+            if (measType == CommandSet.START_MEAS_CONST)
+            {
+                // clear data from previous measurement
+                dataPointsX.Clear();
+                dataPointsY.Clear();
+
+                chartPlot.ChartAreas[0].AxisX.Minimum = 0;
+                chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax / dataPointsPerSec;
+                chartPlot.ChartAreas[0].AxisY.Minimum = -50;
+                chartPlot.ChartAreas[0].AxisY.Maximum = 50;
+
+                // Custom labels for the x- & y-axis with 2 decimal places
+                chartPlot.ChartAreas[0].AxisX.LabelStyle.Format = "0.00";
+                chartPlot.ChartAreas[0].AxisY.LabelStyle.Format = "0.00";
+
+                chartPlot.ChartAreas[0].AxisX.Title = "Time [s]";
+                chartPlot.ChartAreas[0].AxisY.Title = "Current [uA]";
+            }
+
             /* CV setup:
                 it receives a single value representing the current over the applied voltage, 
                 which is swept between two values over multiple cycles. 
                 Thus, in best case, we plot a separate curve for each cycle & add it in the legend.
             */
+            if (measType == CommandSet.START_MEAS_CV)
+            {
+                // clear data from previous measurement
+                dataPointsX.Clear();
+                dataPointsY.Clear();
+
+                // TODO: set x-axis limits based on the voltage range of the CV
+                chartPlot.ChartAreas[0].AxisX.Minimum = 0;
+                chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax / dataPointsPerSec;
+                // TODO: set y-axis limits based on the max/min current values
+                chartPlot.ChartAreas[0].AxisY.Minimum = -50;
+                chartPlot.ChartAreas[0].AxisY.Maximum = 50;
+
+                // Custom labels for the x- & y-axis with 2 decimal places
+                chartPlot.ChartAreas[0].AxisX.LabelStyle.Format = "0.00";
+                chartPlot.ChartAreas[0].AxisY.LabelStyle.Format = "0.00";
+                
+                chartPlot.ChartAreas[0].AxisX.Title = "Voltage [V]";
+                chartPlot.ChartAreas[0].AxisY.Title = "Current [uA]";
+            }
 
             /* EIS setup:
                 it receives multiple values from which the real & imaginary part 
@@ -74,11 +121,6 @@ namespace Biosensor_GUI
             */
             if (measType == CommandSet.START_MEAS_EIS)
             {
-                foreach (var series in chartPlot.Series)
-                {
-                    series.Points.Clear();
-                }
-
                 chartPlot.ChartAreas[0].AxisX.Minimum = 0;
                 chartPlot.ChartAreas[0].AxisX.Maximum = 10;
                 chartPlot.ChartAreas[0].AxisY.Minimum = 0;
@@ -92,9 +134,9 @@ namespace Biosensor_GUI
         {
             if (serialPort != null && serialPort.IsOpen)
             {
-                while (serialPort.BytesToRead > 0)
+                if (serialPort.BytesToRead > 0)
                 {
-                    serialPort.ReadLine();
+                    serialPort.DiscardInBuffer();
                 }
             }
         }
@@ -162,47 +204,58 @@ namespace Biosensor_GUI
             // update plot
             if (measurementID == CommandSet.DATA_MEAS_CONST || measurementID == CommandSet.DATA_MEAS_CV)
             {
-                /*  For this measurement we receive single values
-                    that represent current given as ADC code.
+                /*  Constant voltage / amperometric :
+                            receive :
+                                ADC code of measured current
+                            plot :
+                                current [uA] against time [s]
                 */
                 
-                int newValue = dataValues[dataIdx++];
+                int dacValue = dataValues[dataIdx++];   // DAC code of the measured current
 
-                dataRxCount++;
-                
-                chartPlot.Series[0].Points.AddY(newValue);
+                /* Map DAC to microamps based on figure 4 from the Amperometric Example / Application Note (AN-1281) */
+                double slope = -0.004883;   // pre-calculated slope of current---DAC line
+                double current_uA = Math.Round(100 + (dacValue - 12288) * slope, 2, MidpointRounding.AwayFromZero);   // 12288 is the decimal for '0x3000' (min. DAC code in hex)
+                //current_uA *= 5;    // adjustment factor ?
 
                 int currentDataCount = chartPlot.Series[0].Points.Count;
+                double time_s = Math.Round((double)(currentDataCount) / dataPointsPerSec, 2, MidpointRounding.AwayFromZero); // 1000 == number of samples per second from the uC
+
+                // add data to plot
+                chartPlot.Series[0].Points.AddXY(time_s, current_uA);
 
                 // store the new data in the data variables outside of the plot
-                dataPointsY.Add(newValue);
-                dataPointsX.Add(currentDataCount);
+                dataPointsY.Add(current_uA);
+                dataPointsX.Add(time_s); 
 
                 // scroll chart along with new data
-                if (chartPlot.Series[0].Points.Count > dataPointsMax)
+                if (currentDataCount > dataPointsMax)
                 {
-                    chartPlot.ChartAreas[0].AxisX.Minimum = currentDataCount - dataPointsMax;
-                    chartPlot.ChartAreas[0].AxisX.Maximum = currentDataCount;
+                    chartPlot.ChartAreas[0].AxisX.Minimum = dataPointsX[currentDataCount - dataPointsMax - 1];
+                    chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsX[currentDataCount-1];
                 }
 
                 // set the y-axis limits within the min/max of the past values
                 int lastValuesCount = Math.Min(currentDataCount, dataPointsMax );
-                List<int> lastValues = dataPointsY.Skip(currentDataCount - lastValuesCount).ToList();
+                List<double> lastValues = dataPointsY.Skip(currentDataCount - lastValuesCount).ToList();
 
-                int maxLastValues = lastValues.Max();
-                int minLastValues = lastValues.Min();
+                double maxLastValues = lastValues.Max();
+                double minLastValues = lastValues.Min();
 
-                chartPlot.ChartAreas[0].AxisY.Minimum = minLastValues - 100;
-                chartPlot.ChartAreas[0].AxisY.Maximum = maxLastValues + 100;
+                chartPlot.ChartAreas[0].AxisY.Minimum = minLastValues - 5;
+                chartPlot.ChartAreas[0].AxisY.Maximum = maxLastValues + 5;
             }
             else if (measurementID == CommandSet.DATA_MEAS_EIS)
             {
-                /*  For EIS we receive: 
-                    frequency
-                    Rcal - real part
-                    Rcal - imag part
-                    Zm (measured impedance) - real part
-                    Zm (measured impedance) - imag part
+                /*  EIS
+                        receive : 
+                            frequency
+                            Rcal - real part
+                            Rcal - imag part
+                            Zm (measured impedance) - real part
+                            Zm (measured impedance) - imag part
+                        plot :
+                            imag against real part of estimated unknown impedance
                 */
 
                 int frequency = dataValues[dataIdx++];
@@ -452,7 +505,7 @@ namespace Biosensor_GUI
                     string logText = "";
 
                     // empty the receive buffer
-                    // emptyRxBuffer();
+                     emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
@@ -516,7 +569,7 @@ namespace Biosensor_GUI
                     string logText = "";
 
                     // empty the receive buffer
-                    // emptyRxBuffer();
+                    emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
@@ -628,7 +681,7 @@ namespace Biosensor_GUI
                     string logText = "";
 
                     // empty the receive buffer
-                    // emptyRxBuffer();
+                    emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
