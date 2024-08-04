@@ -420,6 +420,7 @@ namespace Biosensor_GUI
                     tabPageConfig.Enabled = true;
                     groupBoxSignalType.Enabled = true;
 
+                    saveDataBut.PerformClick();
                     // save Data ?
                     // update UI ? (buttons, etc.)
                 }
@@ -809,33 +810,65 @@ namespace Biosensor_GUI
 
         private void saveDataBut_Click(object sender, EventArgs e)
         {
-            try
-            {
-                // TODO: differentiate saving results from all measurement types
+          
+            if (radioBtnConstV.Checked || radioBtnConstV.Checked) {
 
-                string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
-
-                //var writeDataX = string.Join(" ", dataPointsX);
-                //var writeDataY = string.Join(" ", dataPointsY);
-                //string[] writeData = { writeDataX, writeDataY };
-
-                // Create an array to hold the lines
-                string[] writeData = new string[dataPointsX.Count];
-
-                // Populate the lines array
-                for (int i = 0; i < dataPointsX.Count; i++)
+                try
                 {
-                    writeData[i] = $"{dataPointsX[i]} {dataPointsY[i]}";
-                }
-                // Write all lines to the file
-                File.WriteAllLines(dataPath, writeData);
-                textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
+                    // TODO: differentiate saving results from all measurement types
 
-                measCounter += 1;
+                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
+
+                    //var writeDataX = string.Join(" ", dataPointsX);
+                    //var writeDataY = string.Join(" ", dataPointsY);
+                    //string[] writeData = { writeDataX, writeDataY };
+
+                    // Create an array to hold the lines
+                    string[] writeData = new string[dataPointsX.Count];
+
+                    // Populate the lines array
+                    for (int i = 0; i < dataPointsX.Count; i++)
+                    {
+                        writeData[i] = $"{dataPointsX[i]} {dataPointsY[i]}";
+                    }
+                    // Write all lines to the file
+                    File.WriteAllLines(dataPath, writeData);
+                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
+
+                    measCounter += 1;
+                }
+                catch
+                {
+                    textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+                }
             }
-            catch
+            else if (radioBtnEIS.Checked)
             {
-                textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+                try
+                {
+               
+                    // TODO: differentiate saving results from all measurement types
+                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + "EIS.txt";
+
+                    // Create an array to hold the lines
+                    string[] writeData = new string[xDataEIS.Count];
+
+                    // Populate the lines array
+                    for (int i = 0; i < xDataEIS.Count; i++)
+                    {
+                        writeData[i] = $"{xDataEIS[i]} {yDataEIS[i]} {freqDataEIS[i]}";
+                    }
+                    // Write all lines to the file
+                    File.WriteAllLines(dataPath, writeData);
+                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + "EIS.txt" + Environment.NewLine);
+
+                    measCounter += 1;
+                }
+                catch
+                {
+                    textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+                }
+               
             }
         }
 
