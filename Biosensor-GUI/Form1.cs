@@ -121,9 +121,14 @@ namespace Biosensor_GUI
             */
             if (measType == CommandSet.START_MEAS_EIS)
             {
-                chartPlot.ChartAreas[0].AxisX.Minimum = 0;
+                // clear data from previous measurement
+                xDataEIS.Clear();
+                yDataEIS.Clear();
+                freqDataEIS.Clear();
+
+                chartPlot.ChartAreas[0].AxisX.Minimum = -1;
                 chartPlot.ChartAreas[0].AxisX.Maximum = 10;
-                chartPlot.ChartAreas[0].AxisY.Minimum = 0;
+                chartPlot.ChartAreas[0].AxisY.Minimum = -1;
                 chartPlot.ChartAreas[0].AxisY.Maximum = 10;
 
                 chartPlot.ChartAreas[0].AxisX.Title = "Re {Zx}";
@@ -810,18 +815,17 @@ namespace Biosensor_GUI
 
         private void saveDataBut_Click(object sender, EventArgs e)
         {
-          
-            if (radioBtnConstV.Checked || radioBtnConstV.Checked) {
+            // TODO: separate measCounter for each measurement type
 
+            if (radioBtnConstV.Checked || radioBtnCV.Checked)
+            {
+                string measTypeStr = "amperometric";
+                if (radioBtnCV.Checked)
+                    measTypeStr = "CV";
                 try
                 {
-                    // TODO: differentiate saving results from all measurement types
 
-                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + ".txt";
-
-                    //var writeDataX = string.Join(" ", dataPointsX);
-                    //var writeDataY = string.Join(" ", dataPointsY);
-                    //string[] writeData = { writeDataX, writeDataY };
+                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measTypeStr + measCounter + ".txt";
 
                     // Create an array to hold the lines
                     string[] writeData = new string[dataPointsX.Count];
@@ -833,22 +837,20 @@ namespace Biosensor_GUI
                     }
                     // Write all lines to the file
                     File.WriteAllLines(dataPath, writeData);
-                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + ".txt" + Environment.NewLine);
+                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measTypeStr + measCounter + ".txt" + Environment.NewLine);
 
                     measCounter += 1;
                 }
                 catch
                 {
-                    textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+                    textBoxLog.AppendText("Saving " + measTypeStr + " not succesfull " + Environment.NewLine);
                 }
             }
             else if (radioBtnEIS.Checked)
             {
                 try
                 {
-               
-                    // TODO: differentiate saving results from all measurement types
-                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + measCounter + "EIS.txt";
+                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + "EIS" + measCounter + ".txt";
 
                     // Create an array to hold the lines
                     string[] writeData = new string[xDataEIS.Count];
@@ -860,13 +862,13 @@ namespace Biosensor_GUI
                     }
                     // Write all lines to the file
                     File.WriteAllLines(dataPath, writeData);
-                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + measCounter + "EIS.txt" + Environment.NewLine);
+                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + "EIS" + measCounter + ".txt" + Environment.NewLine);
 
                     measCounter += 1;
                 }
                 catch
                 {
-                    textBoxLog.AppendText("Saving not succesfull " + Environment.NewLine);
+                    textBoxLog.AppendText("Saving EIS not succesfull " + Environment.NewLine);
                 }
                
             }
