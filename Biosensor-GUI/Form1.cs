@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -61,6 +63,7 @@ namespace Biosensor_GUI
         }
         private void SetupPlot(byte measType)
         {
+            dataRxCount = 0;
             foreach (var series in chartPlot.Series)
             {
                series.Points.Clear();
@@ -314,6 +317,7 @@ namespace Biosensor_GUI
 
                 // how to plot/denote the frequency in the 2D Chart ? add annotation ?
             }
+            dataRxCount++;
         }
 
         /*
@@ -425,8 +429,8 @@ namespace Biosensor_GUI
                     tabPageConfig.Enabled = true;
                     groupBoxSignalType.Enabled = true;
 
+                    // save measurement data
                     saveDataBut.PerformClick();
-                    // save Data ?
                     // update UI ? (buttons, etc.)
                 }
                 catch (Exception ex)
@@ -443,6 +447,11 @@ namespace Biosensor_GUI
         {
             stopMeasTimer.Stop();
 
+            // wait until we reach the amount of data expected by the data rate of the uC
+            while (dataRxCount < dataPointsPerSec * (stopMeasTimer.Interval / 1000))
+            {
+                Thread.Sleep(5);
+            }
             this.BeginInvoke(new Action(() =>
             {
                 // call stop button function
