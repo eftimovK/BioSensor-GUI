@@ -129,8 +129,8 @@ namespace Biosensor_GUI
                 yDataEIS.Clear();
                 freqDataEIS.Clear();
 
-                chartPlot.ChartAreas[0].AxisX.Minimum = -1;
-                chartPlot.ChartAreas[0].AxisX.Maximum = 10;
+                chartPlot.ChartAreas[0].AxisX.Minimum = 10;
+                chartPlot.ChartAreas[0].AxisX.Maximum = 20;
                 chartPlot.ChartAreas[0].AxisY.Minimum = -1;
                 chartPlot.ChartAreas[0].AxisY.Maximum = 10;
 
@@ -298,17 +298,17 @@ namespace Biosensor_GUI
 
                 // set the y-axis limits within the min/max of the max values
                 if (Zx_re > chartPlot.ChartAreas[0].AxisX.Maximum) { 
-                    chartPlot.ChartAreas[0].AxisX.Maximum = Zx_re + 50;
+                    chartPlot.ChartAreas[0].AxisX.Maximum = Zx_re + 10;
                 }
                 if (Zx_re < chartPlot.ChartAreas[0].AxisX.Minimum) { 
-                    chartPlot.ChartAreas[0].AxisX.Minimum = Zx_re - 50;
+                    chartPlot.ChartAreas[0].AxisX.Minimum = Zx_re - 10;
                 }
                 if (Zx_im > chartPlot.ChartAreas[0].AxisY.Maximum) {
-                    chartPlot.ChartAreas[0].AxisY.Maximum = Zx_im + 50;
+                    chartPlot.ChartAreas[0].AxisY.Maximum = Zx_im + 10;
                 }
                 if (Zx_im < chartPlot.ChartAreas[0].AxisY.Minimum)
                 {
-                    chartPlot.ChartAreas[0].AxisY.Minimum = Zx_im - 50;
+                    chartPlot.ChartAreas[0].AxisY.Minimum = Zx_im - 10;
                 }
 
                 xDataEIS.Add(Zx_re);
@@ -448,8 +448,9 @@ namespace Biosensor_GUI
             stopMeasTimer.Stop();
 
             // wait until we reach the amount of data expected by the data rate of the uC
-            while (dataRxCount < dataPointsPerSec * (stopMeasTimer.Interval / 1000))
+            while (dataRxCount < dataPointsPerSec * (stopMeasTimer.Interval / 1000) && !radioBtnEIS.Checked)
             {
+                // TODO: implement timeout for this wait
                 Thread.Sleep(5);
             }
             this.BeginInvoke(new Action(() =>
