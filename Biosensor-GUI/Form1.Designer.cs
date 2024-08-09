@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -105,6 +105,7 @@
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxLogDistribution = new System.Windows.Forms.CheckBox();
             this.tabPageInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).BeginInit();
@@ -142,7 +143,7 @@
             this.label14.Location = new System.Drawing.Point(28, 28);
             this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(148, 19);
+            this.label14.Size = new System.Drawing.Size(182, 24);
             this.label14.TabIndex = 7;
             this.label14.Text = "Before measuring :";
             // 
@@ -153,7 +154,7 @@
             this.label6.Location = new System.Drawing.Point(28, 185);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(136, 19);
+            this.label6.Size = new System.Drawing.Size(168, 24);
             this.label6.TabIndex = 3;
             this.label6.Text = "CV configuration :";
             // 
@@ -315,22 +316,22 @@
             // 
             // chartPlot
             // 
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea1.BackColor = System.Drawing.Color.White;
-            chartArea1.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend1);
+            chartArea6.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea6.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea6.BackColor = System.Drawing.Color.White;
+            chartArea6.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea6);
+            legend6.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend6);
             this.chartPlot.Location = new System.Drawing.Point(20, 128);
             this.chartPlot.Margin = new System.Windows.Forms.Padding(2);
             this.chartPlot.Name = "chartPlot";
-            series1.BorderWidth = 3;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Data Received";
-            this.chartPlot.Series.Add(series1);
+            series6.BorderWidth = 3;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Data Received";
+            this.chartPlot.Series.Add(series6);
             this.chartPlot.Size = new System.Drawing.Size(856, 481);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -363,7 +364,7 @@
             this.radioBtnEIS.AutoSize = true;
             this.radioBtnEIS.Location = new System.Drawing.Point(18, 72);
             this.radioBtnEIS.Name = "radioBtnEIS";
-            this.radioBtnEIS.Size = new System.Drawing.Size(42, 17);
+            this.radioBtnEIS.Size = new System.Drawing.Size(47, 19);
             this.radioBtnEIS.TabIndex = 47;
             this.radioBtnEIS.TabStop = true;
             this.radioBtnEIS.Text = "EIS";
@@ -374,7 +375,7 @@
             this.radioBtnConstV.AutoSize = true;
             this.radioBtnConstV.Location = new System.Drawing.Point(18, 26);
             this.radioBtnConstV.Name = "radioBtnConstV";
-            this.radioBtnConstV.Size = new System.Drawing.Size(89, 17);
+            this.radioBtnConstV.Size = new System.Drawing.Size(99, 19);
             this.radioBtnConstV.TabIndex = 46;
             this.radioBtnConstV.TabStop = true;
             this.radioBtnConstV.Text = "const voltage";
@@ -385,7 +386,7 @@
             this.radioBtnCV.AutoSize = true;
             this.radioBtnCV.Location = new System.Drawing.Point(18, 49);
             this.radioBtnCV.Name = "radioBtnCV";
-            this.radioBtnCV.Size = new System.Drawing.Size(111, 17);
+            this.radioBtnCV.Size = new System.Drawing.Size(126, 19);
             this.radioBtnCV.TabIndex = 0;
             this.radioBtnCV.TabStop = true;
             this.radioBtnCV.Text = "cyclic voltammetry";
@@ -393,6 +394,7 @@
             // 
             // tabPageConfig
             // 
+            this.tabPageConfig.Controls.Add(this.checkBoxLogDistribution);
             this.tabPageConfig.Controls.Add(this.label22);
             this.tabPageConfig.Controls.Add(this.label21);
             this.tabPageConfig.Controls.Add(this.label20);
@@ -454,7 +456,7 @@
             this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.Location = new System.Drawing.Point(322, 424);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(115, 20);
+            this.label22.Size = new System.Drawing.Size(142, 25);
             this.label22.TabIndex = 71;
             this.label22.Text = "Save Plot Data";
             // 
@@ -464,7 +466,7 @@
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label21.Location = new System.Drawing.Point(52, 424);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(125, 20);
+            this.label21.Size = new System.Drawing.Size(153, 25);
             this.label21.TabIndex = 70;
             this.label21.Text = "USB connection";
             // 
@@ -474,7 +476,7 @@
             this.label20.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label20.Location = new System.Drawing.Point(50, 349);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(757, 36);
+            this.label20.Size = new System.Drawing.Size(908, 42);
             this.label20.TabIndex = 69;
             this.label20.Text = "_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _";
             // 
@@ -483,7 +485,7 @@
             this.label19.AutoSize = true;
             this.label19.Location = new System.Drawing.Point(781, 96);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(112, 13);
+            this.label19.Size = new System.Drawing.Size(124, 15);
             this.label19.TabIndex = 68;
             this.label19.Text = "AC Voltage Peak [mV]";
             // 
@@ -499,7 +501,7 @@
             // 
             // eisMeasParamBtn
             // 
-            this.eisMeasParamBtn.Location = new System.Drawing.Point(625, 268);
+            this.eisMeasParamBtn.Location = new System.Drawing.Point(627, 263);
             this.eisMeasParamBtn.Margin = new System.Windows.Forms.Padding(2);
             this.eisMeasParamBtn.Name = "eisMeasParamBtn";
             this.eisMeasParamBtn.Size = new System.Drawing.Size(129, 64);
@@ -511,18 +513,18 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(780, 174);
+            this.label18.Location = new System.Drawing.Point(780, 226);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(134, 13);
+            this.label18.Size = new System.Drawing.Size(154, 15);
             this.label18.TabIndex = 65;
             this.label18.Text = "Points In Between (integer)";
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(781, 215);
+            this.label17.Location = new System.Drawing.Point(781, 181);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(104, 13);
+            this.label17.Size = new System.Drawing.Size(116, 15);
             this.label17.TabIndex = 64;
             this.label17.Text = "Stop Frequency [Hz]";
             // 
@@ -531,27 +533,27 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(781, 136);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(104, 13);
+            this.label16.Size = new System.Drawing.Size(116, 15);
             this.label16.TabIndex = 63;
             this.label16.Text = "Start Frequency [Hz]";
             // 
             // textBoxPointsEIS
             // 
-            this.textBoxPointsEIS.Location = new System.Drawing.Point(618, 171);
+            this.textBoxPointsEIS.Location = new System.Drawing.Point(618, 223);
             this.textBoxPointsEIS.Name = "textBoxPointsEIS";
             this.textBoxPointsEIS.Size = new System.Drawing.Size(145, 20);
             this.textBoxPointsEIS.TabIndex = 62;
-            this.textBoxPointsEIS.Text = "10";
+            this.textBoxPointsEIS.Text = "40";
             this.textBoxPointsEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxPointsEIS, "determines the step frequency (min: 0.5 Hz)");
             // 
             // textBoxStopFreqEIS
             // 
-            this.textBoxStopFreqEIS.Location = new System.Drawing.Point(618, 212);
+            this.textBoxStopFreqEIS.Location = new System.Drawing.Point(618, 178);
             this.textBoxStopFreqEIS.Name = "textBoxStopFreqEIS";
             this.textBoxStopFreqEIS.Size = new System.Drawing.Size(145, 20);
             this.textBoxStopFreqEIS.TabIndex = 61;
-            this.textBoxStopFreqEIS.Text = "5000";
+            this.textBoxStopFreqEIS.Text = "100";
             this.textBoxStopFreqEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxStopFreqEIS, "from StartFrequency to 80 kHz");
             // 
@@ -561,7 +563,7 @@
             this.textBoxStartFreqEIS.Name = "textBoxStartFreqEIS";
             this.textBoxStartFreqEIS.Size = new System.Drawing.Size(145, 20);
             this.textBoxStartFreqEIS.TabIndex = 60;
-            this.textBoxStartFreqEIS.Text = "1000";
+            this.textBoxStartFreqEIS.Text = "10000";
             this.textBoxStartFreqEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxStartFreqEIS, "from 100 Hz to 80 kHz");
             // 
@@ -571,7 +573,7 @@
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.Location = new System.Drawing.Point(604, 43);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(190, 20);
+            this.label15.Size = new System.Drawing.Size(234, 25);
             this.label15.TabIndex = 59;
             this.label15.Text = "Impedance Spectroscopy";
             // 
@@ -593,7 +595,7 @@
             this.labelCVDur.AutoSize = true;
             this.labelCVDur.Location = new System.Drawing.Point(490, 169);
             this.labelCVDur.Name = "labelCVDur";
-            this.labelCVDur.Size = new System.Drawing.Size(61, 13);
+            this.labelCVDur.Size = new System.Drawing.Size(69, 15);
             this.labelCVDur.TabIndex = 57;
             this.labelCVDur.Text = "Duration [s]";
             // 
@@ -612,7 +614,7 @@
             this.checkBoxCVMeas.AutoSize = true;
             this.checkBoxCVMeas.Location = new System.Drawing.Point(358, 224);
             this.checkBoxCVMeas.Name = "checkBoxCVMeas";
-            this.checkBoxCVMeas.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxCVMeas.Size = new System.Drawing.Size(99, 19);
             this.checkBoxCVMeas.TabIndex = 55;
             this.checkBoxCVMeas.Text = "continuous ?";
             this.checkBoxCVMeas.UseVisualStyleBackColor = true;
@@ -623,7 +625,7 @@
             this.checkBoxConstMeas.AutoSize = true;
             this.checkBoxConstMeas.Location = new System.Drawing.Point(90, 148);
             this.checkBoxConstMeas.Name = "checkBoxConstMeas";
-            this.checkBoxConstMeas.Size = new System.Drawing.Size(87, 17);
+            this.checkBoxConstMeas.Size = new System.Drawing.Size(99, 19);
             this.checkBoxConstMeas.TabIndex = 54;
             this.checkBoxConstMeas.Text = "continuous ?";
             this.checkBoxConstMeas.UseVisualStyleBackColor = true;
@@ -634,7 +636,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(490, 128);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(76, 13);
+            this.label13.Size = new System.Drawing.Size(85, 15);
             this.label13.TabIndex = 53;
             this.label13.Text = "Voltage 2 [mV]";
             // 
@@ -664,7 +666,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(490, 95);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(76, 13);
+            this.label8.Size = new System.Drawing.Size(85, 15);
             this.label8.TabIndex = 50;
             this.label8.Text = "Voltage 1 [mV]";
             // 
@@ -673,7 +675,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(488, 199);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(91, 26);
+            this.label11.Size = new System.Drawing.Size(104, 30);
             this.label11.TabIndex = 49;
             this.label11.Text = "Slope Duration [s]\r\n     (max. 1.6 s)";
             // 
@@ -703,7 +705,7 @@
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.Location = new System.Drawing.Point(329, 49);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(133, 20);
+            this.label12.Size = new System.Drawing.Size(166, 25);
             this.label12.TabIndex = 46;
             this.label12.Text = "CV Measurement";
             // 
@@ -712,7 +714,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(53, 477);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(59, 13);
+            this.label3.Size = new System.Drawing.Size(66, 15);
             this.label3.TabIndex = 45;
             this.label3.Text = "Select Port";
             // 
@@ -721,7 +723,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(463, 473);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(54, 13);
+            this.label10.Size = new System.Drawing.Size(64, 15);
             this.label10.TabIndex = 44;
             this.label10.Text = "File Name";
             // 
@@ -739,7 +741,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(283, 477);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 13);
+            this.label4.Size = new System.Drawing.Size(55, 15);
             this.label4.TabIndex = 42;
             this.label4.Text = "File Path";
             // 
@@ -789,7 +791,7 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(218, 95);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(67, 13);
+            this.label7.Size = new System.Drawing.Size(75, 15);
             this.label7.TabIndex = 35;
             this.label7.Text = "Voltage [mV]";
             // 
@@ -798,7 +800,7 @@
             this.labelConstVDur.AutoSize = true;
             this.labelConstVDur.Location = new System.Drawing.Point(218, 125);
             this.labelConstVDur.Name = "labelConstVDur";
-            this.labelConstVDur.Size = new System.Drawing.Size(61, 13);
+            this.labelConstVDur.Size = new System.Drawing.Size(69, 15);
             this.labelConstVDur.TabIndex = 34;
             this.labelConstVDur.Text = "Duration [s]";
             // 
@@ -828,7 +830,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(30, 49);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(216, 20);
+            this.label1.Size = new System.Drawing.Size(266, 25);
             this.label1.TabIndex = 28;
             this.label1.Text = "Const. Voltage Measurement";
             // 
@@ -859,7 +861,7 @@
             this.label9.Enabled = false;
             this.label9.Location = new System.Drawing.Point(842, 443);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 13);
+            this.label9.Size = new System.Drawing.Size(82, 15);
             this.label9.TabIndex = 25;
             this.label9.Text = "Pump time [s]";
             this.label9.Visible = false;
@@ -870,7 +872,7 @@
             this.label5.Enabled = false;
             this.label5.Location = new System.Drawing.Point(842, 479);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(80, 13);
+            this.label5.Size = new System.Drawing.Size(94, 15);
             this.label5.TabIndex = 24;
             this.label5.Text = "Pump pressure ";
             this.label5.Visible = false;
@@ -882,7 +884,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(746, 393);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 20);
+            this.label2.Size = new System.Drawing.Size(63, 25);
             this.label2.TabIndex = 23;
             this.label2.Text = "Pump";
             this.label2.Visible = false;
@@ -934,6 +936,16 @@
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "tabPage6";
             this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLogDistribution
+            // 
+            this.checkBoxLogDistribution.AutoSize = true;
+            this.checkBoxLogDistribution.Location = new System.Drawing.Point(795, 263);
+            this.checkBoxLogDistribution.Name = "checkBoxLogDistribution";
+            this.checkBoxLogDistribution.Size = new System.Drawing.Size(90, 34);
+            this.checkBoxLogDistribution.TabIndex = 72;
+            this.checkBoxLogDistribution.Text = "logarithmic\r\ndistribution";
+            this.checkBoxLogDistribution.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -1040,6 +1052,7 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.CheckBox checkBoxLogDistribution;
     }
 }
 

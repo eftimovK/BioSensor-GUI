@@ -21,9 +21,7 @@ namespace Biosensor_GUI
         public static readonly byte SET_VOLTAGE2_CV  = 102;  /*!< Set voltage level 2 for CV excitation */
         public static readonly byte SET_SLOPE_TIME_CV  = 103; /*!< Set slope duration for CV excitation */
         public static readonly byte SET_VOLTAGE_EIS    = 104; /*!< Set voltage for EIS (AC excitation)  */
-        public static readonly byte SET_START_FREQ_EIS = 105; /*!< Set start frequency for EIS          */
-        public static readonly byte SET_STOP_FREQ_EIS  = 106; /*!< Set stop frequency for EIS           */
-        public static readonly byte SET_STEP_FREQ_EIS  = 107; /*!< Set step frequency for EIS           */
+        public static readonly byte SET_NUM_FREQ_EIS   = 107; /*!< Set number of frequencies for EIS    */
 
         /* IDs of commands received from the microcontroller */
         public static readonly byte DATA_MEAS_CONST     = 1;    /*!< Measurement data is from const voltage excitation  */
