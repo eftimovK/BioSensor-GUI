@@ -53,13 +53,22 @@ namespace Biosensor_GUI
 
             // initial chart config
 
-            chartPlot.ChartAreas[0].AxisX.Minimum = 0;  // address the first ChartArea
-            chartPlot.ChartAreas[0].AxisX.Maximum = dataPointsMax / dataPointsPerSec;
-            chartPlot.ChartAreas[0].AxisY.Minimum = 0;
-            chartPlot.ChartAreas[0].AxisY.Maximum = 10;
+            chartPlot.ChartAreas[0].AxisX.Minimum = 30;  // address the first ChartArea
+            chartPlot.ChartAreas[0].AxisX.Maximum = 300;
+            chartPlot.ChartAreas[0].AxisY.Minimum = 42;
+            chartPlot.ChartAreas[0].AxisY.Maximum = 420;
 
             // add a point to the series to display the plot
-            chartPlot.Series[0].Points.AddXY(0, 0); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(50, 60); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(70, 120); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(120, 150); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(150, 180); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(220, 220); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(280, 330); // address the first Series of the chart
+            chartPlot.Series[0].Points.AddXY(300, 350); // address the first Series of the chart
+
+            chartPlot.ChartAreas[0].AxisY.Title = "Y [a.u.]";
+            chartPlot.ChartAreas[0].AxisX.Title = "Creatinine [uM]";
         }
         private void SetupPlot(byte measType)
         {
