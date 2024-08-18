@@ -89,5 +89,15 @@ namespace Biosensor_GUI.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon Logo_without_name_ico {
+            get {
+                object obj = ResourceManager.GetObject("Logo_without_name_ico", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }

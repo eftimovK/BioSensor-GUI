@@ -14,7 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Biosensor_GUI
 {
-    public partial class Form1 : Form
+    public partial class mainForm : Form
     {
         private int dataRxCount = 0;
         private int measCounter = 1;
@@ -31,9 +31,10 @@ namespace Biosensor_GUI
         private const int calibrationResistor = 1000;   // [Ohm]
         private System.Timers.Timer stopMeasTimer;
 
-        public Form1()
+        public mainForm()
         {
             InitializeComponent();
+            this.Icon = Properties.Resources.Logo_without_name_ico;
 
             textBoxLog.AppendText("-----Log-----" + Environment.NewLine + Environment.NewLine);
 
