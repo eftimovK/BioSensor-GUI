@@ -18,14 +18,15 @@ namespace Biosensor_GUI
     {
         private int dataRxCount = 0;
         private int measCounter = 1;
+        private int measCounterEIS = 1;
 
         private int dataPointsMax = 4000;   // max. number of points displayed in the plot
         private int dataPointsPerSec = 1000;   // samples per second, determined by the sampling freq. on the uC
         List<double> dataPointsX = new List<double>();    // X-axis data for const voltage excitation & CV (time in sec.)
         List<double> dataPointsY = new List<double>();    // Y-axis data for const voltage excitation & CV (current in uA)
-        List<double> xDataEIS = new List<double>();    // X-axis data for EIS (real part of measured impedance)
-        List<double> yDataEIS = new List<double>();    // Y-axis data for EIS (imaginary part of measured impedance)
-        List<int> freqDataEIS = new List<int>();    // frequencies for EIS, corresponding (index-wise) to the measured impedance
+        List<List<double>> xDataEIS = new List<List<double>>();    // X-axis data for EIS (real part of measured impedance)
+        List<List<double>> yDataEIS = new List<List<double>>();    // Y-axis data for EIS (imaginary part of measured impedance)
+        List<List<int>> freqDataEIS = new List<List<int>>();    // frequencies for EIS, corresponding (index-wise) to the measured impedance
         bool readConfigData = false;                // marks whether the data received refers to the config cmds
         int configSuccess = -1;                     // -1 denotes that no return value (0 or 1) was read from the port
         private const int calibrationResistor = 1000;   // [Ohm]
@@ -74,10 +75,6 @@ namespace Biosensor_GUI
         private void SetupPlot(byte measType)
         {
             dataRxCount = 0;
-            foreach (var series in chartPlot.Series)
-            {
-               series.Points.Clear();
-            }
 
             /* const voltage setup:
                 it receives a single value representing the current over time, 
@@ -123,7 +120,7 @@ namespace Biosensor_GUI
                 // Custom labels for the x- & y-axis with 2 decimal places
                 chartPlot.ChartAreas[0].AxisX.LabelStyle.Format = "0.00";
                 chartPlot.ChartAreas[0].AxisY.LabelStyle.Format = "0.00";
-                
+
                 chartPlot.ChartAreas[0].AxisX.Title = "Voltage [V]";
                 chartPlot.ChartAreas[0].AxisY.Title = "Current [uA]";
             }
@@ -134,18 +131,45 @@ namespace Biosensor_GUI
             */
             if (measType == CommandSet.START_MEAS_EIS)
             {
-                // clear data from previous measurement
-                xDataEIS.Clear();
-                yDataEIS.Clear();
-                freqDataEIS.Clear();
+                if (measCounterEIS == 1)
+                {
+                    // clear the initial plot to reuse for meas. points
+                    chartPlot.Series[0].Points.Clear();
 
-                chartPlot.ChartAreas[0].AxisX.Minimum = 10;
-                chartPlot.ChartAreas[0].AxisX.Maximum = 20;
-                chartPlot.ChartAreas[0].AxisY.Minimum = -1;
-                chartPlot.ChartAreas[0].AxisY.Maximum = 10;
+                    // set up axes
+                    chartPlot.ChartAreas[0].AxisX.Minimum = 10;
+                    chartPlot.ChartAreas[0].AxisX.Maximum = 20;
+                    chartPlot.ChartAreas[0].AxisY.Minimum = -1;
+                    chartPlot.ChartAreas[0].AxisY.Maximum = 10;
 
-                chartPlot.ChartAreas[0].AxisX.Title = "Re {Zx}";
-                chartPlot.ChartAreas[0].AxisY.Title = "Im {Zx}";
+                    // Custom labels for the x- & y-axis with 2 decimal places
+                    chartPlot.ChartAreas[0].AxisX.LabelStyle.Format = "0.00";
+                    chartPlot.ChartAreas[0].AxisY.LabelStyle.Format = "0.00";
+
+                    chartPlot.ChartAreas[0].AxisX.Title = "Re {Zx}";
+                    chartPlot.ChartAreas[0].AxisY.Title = "-Im {Zx}";
+                }
+                else if (measCounterEIS > 1)
+                {
+                    // create a new series
+                    Series newSeries = new Series();
+
+                    // set properties the same as the first one
+                    newSeries.ChartArea = chartPlot.Series[0].ChartArea;
+                    newSeries.BorderDashStyle = chartPlot.Series[0].BorderDashStyle;
+                    newSeries.BorderWidth = chartPlot.Series[0].BorderWidth;
+                    newSeries.ChartType = chartPlot.Series[0].ChartType;
+                    newSeries.MarkerSize = chartPlot.Series[0].MarkerSize;
+                    newSeries.MarkerStyle = chartPlot.Series[0].MarkerStyle;
+
+                    chartPlot.Series.Add(newSeries);
+                }
+                // set legend name based on save file name
+                chartPlot.Series[measCounterEIS - 1].Name = fileNameBox.Text + "_" + measCounterEIS.ToString();
+                
+                xDataEIS.Add(new List<double>());
+                yDataEIS.Add(new List<double>());
+                freqDataEIS.Add(new List<int>());
             }
         }
         private void emptyRxBuffer()
@@ -198,7 +222,7 @@ namespace Biosensor_GUI
         {
             // TODO: use an encoding for the data received; 
             //      => currently implemented for the measurement data received, but not for config return values
-            
+
             if (readConfigData) // incoming data refers to config cmds
             {
                 // set config bool flag based on return value
@@ -260,7 +284,7 @@ namespace Biosensor_GUI
                             plot :
                                 current [uA] against time [s]
                 */
-                
+
                 int dacValue = dataValues[dataIdx++];   // DAC code of the measured current
 
                 /* Map DAC to microamps based on figure 4 from the Amperometric Example / Application Note (AN-1281) */
@@ -276,7 +300,7 @@ namespace Biosensor_GUI
 
                 // store the new data in the data variables outside of the plot
                 dataPointsY.Add(current_uA);
-                dataPointsX.Add(time_s); 
+                dataPointsX.Add(time_s);
 
                 // scroll chart along with new data
                 if (currentDataCount > dataPointsMax)
@@ -334,9 +358,12 @@ namespace Biosensor_GUI
                 double Zx_re = Math.Round(Zx_mag * Math.Cos(Zx_phase), 2, MidpointRounding.AwayFromZero);
                 double Zx_im = Math.Round(Zx_mag * Math.Sin(Zx_phase), 2, MidpointRounding.AwayFromZero);
 
+                // change sign of the imaginary part, since the y-axis is flipped
+                Zx_im = -Zx_im;
+
                 // the real part is x-value
                 // the imag part is y-value
-                chartPlot.Series[0].Points.AddXY(Zx_re, Zx_im);
+                chartPlot.Series[measCounterEIS - 1].Points.AddXY(Zx_re, Zx_im);
 
                 // set the y-axis limits within the min/max of the max values
                 if (Zx_re > chartPlot.ChartAreas[0].AxisX.Maximum) { 
@@ -353,9 +380,9 @@ namespace Biosensor_GUI
                     chartPlot.ChartAreas[0].AxisY.Minimum = Zx_im - 10;
                 }
 
-                xDataEIS.Add(Zx_re);
-                yDataEIS.Add(Zx_im);
-                freqDataEIS.Add(frequency);
+                xDataEIS[measCounterEIS - 1].Add(Zx_re);
+                yDataEIS[measCounterEIS - 1].Add(Zx_im);
+                freqDataEIS[measCounterEIS - 1].Add(frequency);
 
                 // how to plot/denote the frequency in the 2D Chart ? add annotation ?
             }
@@ -404,7 +431,7 @@ namespace Biosensor_GUI
                     MessageBox.Show("Select a measurement type (excitation signal) before clicking start.");
                     return;
                 }
-                
+
                 float measDuration;
                 if ((float.TryParse(measDurationStr, out measDuration) == false) && !continuousMeasurement)
                 {
@@ -472,7 +499,7 @@ namespace Biosensor_GUI
                     groupBoxSignalType.Enabled = true;
 
                     // save measurement data
-                    saveDataBut.PerformClick();
+                    saveDataBut_Click(this, EventArgs.Empty);
                     // update UI ? (buttons, etc.)
                 }
                 catch (Exception ex)
@@ -568,7 +595,7 @@ namespace Biosensor_GUI
                     string logText = "";
 
                     // empty the receive buffer
-                     emptyRxBuffer();
+                    emptyRxBuffer();
 
                     // start config
                     serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
@@ -775,7 +802,7 @@ namespace Biosensor_GUI
                     {
                         MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
                     }
-                    
+
                     // set number of frequency points and the frequencies distributed between start- and stop-frequency
                     string startFreqStr = textBoxStartFreqEIS.Text;
                     string stopFreqStr = textBoxStopFreqEIS.Text;
@@ -812,7 +839,7 @@ namespace Biosensor_GUI
                         logText = "Frequency points set failed";
                         if (ConfigSuccess())
                         {
-                            logText = logTextLinLog + " distributed " + freqPointsStr + " frequency points;" + Environment.NewLine 
+                            logText = logTextLinLog + " distributed " + freqPointsStr + " frequency points;" + Environment.NewLine
                             + "--> range: " + startFreqStr + " - " + stopFreqStr + " Hz";
                         }
                         textBoxLog.AppendText(logText + Environment.NewLine);
@@ -881,27 +908,28 @@ namespace Biosensor_GUI
             {
                 try
                 {
-                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + "EIS" + measCounter + ".txt";
+                    string dataPath = dataPathBox.Text + "/" + fileNameBox.Text + "EIS" + measCounterEIS + ".txt";
 
                     // Create an array to hold the lines
-                    string[] writeData = new string[xDataEIS.Count];
+                    string[] writeData = new string[xDataEIS[measCounterEIS - 1].Count];
 
                     // Populate the lines array
-                    for (int i = 0; i < xDataEIS.Count; i++)
+                    for (int i = 0; i < xDataEIS[measCounterEIS - 1].Count; i++)
                     {
-                        writeData[i] = $"{xDataEIS[i]} {yDataEIS[i]} {freqDataEIS[i]}";
+                        writeData[i] = $"{xDataEIS[measCounterEIS - 1][i]} {yDataEIS[measCounterEIS - 1][i]} {freqDataEIS[measCounterEIS - 1][i]}";
                     }
                     // Write all lines to the file
                     File.WriteAllLines(dataPath, writeData);
-                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + "EIS" + measCounter + ".txt" + Environment.NewLine);
+                    textBoxLog.AppendText("Succesfull save of " + fileNameBox.Text + "EIS" + measCounterEIS + ".txt" + Environment.NewLine);
 
-                    measCounter += 1;
+                    measCounterEIS += 1;
+                    // TODO: or maybe increase after this fcn call, in the stop btn click, so that even unsuccessfull save increments the measurement counter
                 }
                 catch
                 {
                     textBoxLog.AppendText("Saving EIS not succesfull " + Environment.NewLine);
                 }
-               
+
             }
         }
 
@@ -936,6 +964,14 @@ namespace Biosensor_GUI
         private void pictureBox2_Click(object sender, EventArgs e)
         {
             tabControl2.SelectedTab = tabPageInfo;
+        }
+
+        private void mainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (serialPort != null && serialPort.IsOpen)
+            {
+                serialPort.Close();
+            }
         }
     }
 }
