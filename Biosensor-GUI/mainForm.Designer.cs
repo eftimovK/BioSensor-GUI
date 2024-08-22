@@ -32,6 +32,7 @@
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -101,10 +102,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxPumpTime = new System.Windows.Forms.TextBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.textBoxLog = new System.Windows.Forms.TextBox();
-            this.tabControl3 = new System.Windows.Forms.TabControl();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPageInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -116,7 +115,6 @@
             this.groupBoxSignalType.SuspendLayout();
             this.tabPageConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            this.tabControl3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPageInfo
@@ -127,6 +125,7 @@
             this.tabPageInfo.Controls.Add(this.richTextBoxElectrodePins);
             this.tabPageInfo.Controls.Add(this.pictureBox1);
             this.tabPageInfo.Controls.Add(this.pictureBoxElectrodePins);
+            this.tabPageInfo.ImageIndex = 2;
             this.tabPageInfo.Location = new System.Drawing.Point(4, 26);
             this.tabPageInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPageInfo.Name = "tabPageInfo";
@@ -142,9 +141,9 @@
             this.label14.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.Location = new System.Drawing.Point(37, 34);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(182, 24);
+            this.label14.Size = new System.Drawing.Size(260, 24);
             this.label14.TabIndex = 7;
-            this.label14.Text = "Before measuring :";
+            this.label14.Text = "Before measuring with EIS :";
             // 
             // label6
             // 
@@ -165,8 +164,8 @@
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(485, 126);
             this.richTextBox1.TabIndex = 5;
-            this.richTextBox1.Text = "• Check range of voltage : [-800, 800] mV\n• Check range of slope duration : [0, 1" +
-    ".6] seconds\n• Check connected pins on microcontroller board\n";
+            this.richTextBox1.Text = "• Check AC voltage range : [0, 20] mV\n• Check frequency range   : [100 Hz, 80 kHz" +
+    "]\n• Check connected pins on microcontroller board";
             // 
             // richTextBoxElectrodePins
             // 
@@ -250,7 +249,8 @@
             this.tabControl2.Controls.Add(this.tabPageConfig);
             this.tabControl2.Controls.Add(this.tabPageInfo);
             this.tabControl2.Font = new System.Drawing.Font("Bahnschrift", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl2.ItemSize = new System.Drawing.Size(120, 22);
+            this.tabControl2.ImageList = this.imageList1;
+            this.tabControl2.ItemSize = new System.Drawing.Size(140, 22);
             this.tabControl2.Location = new System.Drawing.Point(13, 0);
             this.tabControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl2.Name = "tabControl2";
@@ -330,7 +330,7 @@
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series1.Legend = "Legend1";
             series1.MarkerSize = 10;
-            series1.Name = "Data Received";
+            series1.Name = "Real-Time Data";
             this.chartPlot.Series.Add(series1);
             this.chartPlot.Size = new System.Drawing.Size(1213, 626);
             this.chartPlot.TabIndex = 18;
@@ -952,6 +952,14 @@
             this.textBoxPumpTime.TabIndex = 22;
             this.textBoxPumpTime.Visible = false;
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "cv_signal.png");
+            this.imageList1.Images.SetKeyName(1, "Logo_without_name-ico.ico");
+            this.imageList1.Images.SetKeyName(2, "info_icon.png");
+            // 
             // textBoxLog
             // 
             this.textBoxLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -962,46 +970,12 @@
             this.textBoxLog.Size = new System.Drawing.Size(193, 242);
             this.textBoxLog.TabIndex = 39;
             // 
-            // tabControl3
-            // 
-            this.tabControl3.Controls.Add(this.tabPage5);
-            this.tabControl3.Controls.Add(this.tabPage6);
-            this.tabControl3.Location = new System.Drawing.Point(484, 0);
-            this.tabControl3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabControl3.Name = "tabControl3";
-            this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(11, 10);
-            this.tabControl3.TabIndex = 2;
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.Location = new System.Drawing.Point(4, 25);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPage5.Size = new System.Drawing.Size(3, 0);
-            this.tabPage5.TabIndex = 0;
-            this.tabPage5.Text = "tabPage5";
-            this.tabPage5.UseVisualStyleBackColor = true;
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Location = new System.Drawing.Point(4, 25);
-            this.tabPage6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabPage6.Size = new System.Drawing.Size(3, 0);
-            this.tabPage6.TabIndex = 1;
-            this.tabPage6.Text = "tabPage6";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1552, 855);
             this.Controls.Add(this.textBoxLog);
-            this.Controls.Add(this.tabControl3);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -1020,7 +994,6 @@
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            this.tabControl3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1037,9 +1010,6 @@
         private System.Windows.Forms.TabPage tabPageConfig;
         private System.Windows.Forms.Button startMeasBtn;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartPlot;
-        private System.Windows.Forms.TabControl tabControl3;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.Button startFluidBtn;
         private System.Windows.Forms.Button fluidParamBtn;
         private System.Windows.Forms.TextBox textBoxPumpPressure;
@@ -1102,6 +1072,7 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.CheckBox checkBoxLogDistribution;
+        private System.Windows.Forms.ImageList imageList1;
     }
 }
 
