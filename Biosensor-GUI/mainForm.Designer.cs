@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
             this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
@@ -105,6 +105,8 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.label23 = new System.Windows.Forms.Label();
             this.tabPageInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxElectrodePins)).BeginInit();
@@ -115,6 +117,7 @@
             this.groupBoxSignalType.SuspendLayout();
             this.tabPageConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPageInfo
@@ -251,7 +254,7 @@
             this.tabControl2.Font = new System.Drawing.Font("Bahnschrift", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl2.ImageList = this.imageList1;
             this.tabControl2.ItemSize = new System.Drawing.Size(140, 22);
-            this.tabControl2.Location = new System.Drawing.Point(13, 0);
+            this.tabControl2.Location = new System.Drawing.Point(14, 0);
             this.tabControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
@@ -300,7 +303,7 @@
             this.fileNameBox.Name = "fileNameBox";
             this.fileNameBox.Size = new System.Drawing.Size(241, 51);
             this.fileNameBox.TabIndex = 46;
-            this.fileNameBox.Text = "Measurement ";
+            this.fileNameBox.Text = "sampleA_";
             // 
             // stopMeasBtn
             // 
@@ -339,26 +342,26 @@
             // 
             // chartPlot
             // 
-            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea2.BackColor = System.Drawing.Color.White;
-            chartArea2.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend2);
+            chartArea5.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea5.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea5.BackColor = System.Drawing.Color.White;
+            chartArea5.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend5);
             this.chartPlot.Location = new System.Drawing.Point(27, 158);
             this.chartPlot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chartPlot.Name = "chartPlot";
-            series2.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series2.BorderWidth = 3;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.MarkerSize = 14;
-            series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series2.Name = "Calibration Curve";
-            series2.YValuesPerPoint = 2;
-            this.chartPlot.Series.Add(series2);
+            series5.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series5.BorderWidth = 2;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.MarkerSize = 10;
+            series5.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series5.Name = "Calibration Curve";
+            series5.YValuesPerPoint = 2;
+            this.chartPlot.Series.Add(series5);
             this.chartPlot.Size = new System.Drawing.Size(1213, 626);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -593,7 +596,7 @@
             this.textBoxPointsEIS.Name = "textBoxPointsEIS";
             this.textBoxPointsEIS.Size = new System.Drawing.Size(192, 32);
             this.textBoxPointsEIS.TabIndex = 62;
-            this.textBoxPointsEIS.Text = "40";
+            this.textBoxPointsEIS.Text = "3";
             this.textBoxPointsEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxPointsEIS, "determines the step frequency (min: 0.5 Hz)");
             // 
@@ -604,7 +607,7 @@
             this.textBoxStopFreqEIS.Name = "textBoxStopFreqEIS";
             this.textBoxStopFreqEIS.Size = new System.Drawing.Size(192, 32);
             this.textBoxStopFreqEIS.TabIndex = 61;
-            this.textBoxStopFreqEIS.Text = "100";
+            this.textBoxStopFreqEIS.Text = "60000";
             this.textBoxStopFreqEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxStopFreqEIS, "from StartFrequency to 80 kHz");
             // 
@@ -615,7 +618,7 @@
             this.textBoxStartFreqEIS.Name = "textBoxStartFreqEIS";
             this.textBoxStartFreqEIS.Size = new System.Drawing.Size(192, 32);
             this.textBoxStartFreqEIS.TabIndex = 60;
-            this.textBoxStartFreqEIS.Text = "10000";
+            this.textBoxStartFreqEIS.Text = "70000";
             this.textBoxStartFreqEIS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.toolTip1.SetToolTip(this.textBoxStartFreqEIS, "from 100 Hz to 80 kHz");
             // 
@@ -801,7 +804,8 @@
             this.dataPathBox.Name = "dataPathBox";
             this.dataPathBox.Size = new System.Drawing.Size(249, 110);
             this.dataPathBox.TabIndex = 41;
-            this.dataPathBox.Text = "C:\\Users\\Isaac\\Documents\\Studium\\SensUs\\Data\\SensUsGui";
+            this.dataPathBox.Text = "C:\\Users\\User\\Desktop\\RWTH-Life\\Master\\AixSense\\DATA team\\BioSensor-Readout\\Eindh" +
+    "oven\\ETE";
             // 
             // comSelBox
             // 
@@ -975,11 +979,34 @@
             this.textBoxLog.Size = new System.Drawing.Size(193, 242);
             this.textBoxLog.TabIndex = 39;
             // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = global::Biosensor_GUI.Properties.Resources.Logo_without_name_square;
+            this.pictureBox3.Location = new System.Drawing.Point(1325, 671);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(172, 98);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 40;
+            this.pictureBox3.TabStop = false;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(1353, 632);
+            this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(114, 29);
+            this.label23.TabIndex = 73;
+            this.label23.Text = "AixSense";
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1552, 855);
+            this.Controls.Add(this.label23);
+            this.Controls.Add(this.pictureBox3);
             this.Controls.Add(this.textBoxLog);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
@@ -1001,6 +1028,7 @@
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1080,6 +1108,8 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox fileNameBox;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.Label label23;
     }
 }
 

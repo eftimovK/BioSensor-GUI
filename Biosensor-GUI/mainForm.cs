@@ -57,17 +57,33 @@ namespace Biosensor_GUI
 
             chartPlot.ChartAreas[0].AxisX.Minimum = 30;  // address the first ChartArea
             chartPlot.ChartAreas[0].AxisX.Maximum = 300;
-            chartPlot.ChartAreas[0].AxisY.Minimum = 42;
-            chartPlot.ChartAreas[0].AxisY.Maximum = 420;
+            chartPlot.ChartAreas[0].AxisY.Minimum = 10;
+            chartPlot.ChartAreas[0].AxisY.Maximum = 30;
 
             // add a point to the series to display the plot
-            chartPlot.Series[0].Points.AddXY(50, 60); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(70, 120); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(120, 150); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(150, 180); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(220, 220); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(280, 330); // address the first Series of the chart
-            chartPlot.Series[0].Points.AddXY(300, 350); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(50, 60); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(70, 120); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(120, 150); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(150, 180); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(220, 220); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(280, 330); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(300, 350); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(280, 330); // address the first Series of the chart
+            // chartPlot.Series[0].Points.AddXY(300, 350); // address the first Series of the chart
+
+            // plot calib. curve:
+            // extracted coeff. from calib curve in matlab
+            double a = 2.03622;
+            double b = 2.94777;
+            double c = 6.82633;
+            for (int i=30; i<=300; i+=25)
+            {
+                double creaValue = (double)(1/b) * Math.Exp((double)((i - c) / a));
+                double zValue = a * Math.Log(b * i) + c;
+                zValue = Math.Round(zValue);
+                creaValue = Math.Round(creaValue);
+                chartPlot.Series[0].Points.AddXY(i, zValue); // address the first Series of the chart
+            }
 
             chartPlot.ChartAreas[0].AxisY.Title = "Y [a.u.]";
             chartPlot.ChartAreas[0].AxisX.Title = "Creatinine [uM]";
@@ -497,6 +513,8 @@ namespace Biosensor_GUI
                     stopMeasBtn.Enabled = false;
                     tabPageConfig.Enabled = true;
                     groupBoxSignalType.Enabled = true;
+
+                    // calc & display crea value
 
                     // save measurement data
                     saveDataBut_Click(this, EventArgs.Empty);
