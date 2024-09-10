@@ -1,6 +1,6 @@
 ﻿namespace Biosensor_GUI
 {
-    partial class mainForm
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabPageInfo = new System.Windows.Forms.TabPage();
             this.label14 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -342,26 +342,26 @@
             // 
             // chartPlot
             // 
-            chartArea5.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea5.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
-            chartArea5.BackColor = System.Drawing.Color.White;
-            chartArea5.Name = "ChartArea1";
-            this.chartPlot.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chartPlot.Legends.Add(legend5);
+            chartArea7.AxisX.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea7.AxisY.MajorGrid.LineColor = System.Drawing.Color.DarkGray;
+            chartArea7.BackColor = System.Drawing.Color.White;
+            chartArea7.Name = "ChartArea1";
+            this.chartPlot.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            this.chartPlot.Legends.Add(legend7);
             this.chartPlot.Location = new System.Drawing.Point(27, 158);
             this.chartPlot.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chartPlot.Name = "chartPlot";
-            series5.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
-            series5.BorderWidth = 2;
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Legend = "Legend1";
-            series5.MarkerSize = 10;
-            series5.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series5.Name = "Calibration Curve";
-            series5.YValuesPerPoint = 2;
-            this.chartPlot.Series.Add(series5);
+            series7.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series7.BorderWidth = 2;
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Legend = "Legend1";
+            series7.MarkerSize = 10;
+            series7.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series7.Name = "Calibration Curve";
+            series7.YValuesPerPoint = 2;
+            this.chartPlot.Series.Add(series7);
             this.chartPlot.Size = new System.Drawing.Size(1213, 626);
             this.chartPlot.TabIndex = 18;
             this.chartPlot.Text = "chart1";
@@ -982,7 +982,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = global::Biosensor_GUI.Properties.Resources.Logo_without_name_square;
-            this.pictureBox3.Location = new System.Drawing.Point(1325, 671);
+            this.pictureBox3.Location = new System.Drawing.Point(1331, 637);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(172, 98);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -993,7 +993,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label23.Location = new System.Drawing.Point(1353, 632);
+            this.label23.Location = new System.Drawing.Point(1364, 751);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(114, 29);

@@ -14,7 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Biosensor_GUI
 {
-    public partial class mainForm : Form
+    public partial class MainForm : Form
     {
         private int dataRxCount = 0;
         private int measCounter = 1;
@@ -32,7 +32,7 @@ namespace Biosensor_GUI
         private const int calibrationResistor = 1000;   // [Ohm]
         private System.Timers.Timer stopMeasTimer;
 
-        public mainForm()
+        public MainForm()
         {
             InitializeComponent();
             this.Icon = Properties.Resources.Logo_without_name_ico;
@@ -188,48 +188,6 @@ namespace Biosensor_GUI
                 freqDataEIS.Add(new List<int>());
             }
         }
-        private void emptyRxBuffer()
-        {
-            if (serialPort != null && serialPort.IsOpen)
-            {
-                if (serialPort.BytesToRead > 0)
-                {
-                    serialPort.DiscardInBuffer();
-                }
-            }
-        }
-
-        static void logspace(int f1, int f2, int N, Int32[] frequencies)
-        {
-            float log_f1 = (float)Math.Log10(f1);
-            float log_f2 = (float)Math.Log10(f2);
-            float delta_log = (log_f2 - log_f1) / (N - 1); // N-1 segments
-
-            for (int i = 0; i < N; i++)
-            {
-                // if starting from high (f1) to low (f2) => delta_log is negative
-                frequencies[i] = f2 + f1 - (Int32)Math.Pow(10, log_f1 + i * delta_log); // more densely spaced for high freq.
-            }
-            Array.Reverse(frequencies);
-
-            // explicitly set the first and last elements to f1 and f2 to be certain
-            frequencies[0] = (Int32)f1;
-            frequencies[N-1] = (Int32)f2;
-        }
-        static void linspace(int f1, int f2, int N, Int32[] frequencies)
-        {
-            float delta_f = (f2 - f1) / (N - 1); // N-1 segments
-
-            for (int i = 0; i < N; i++)
-            {
-                // if starting from high (f1) to low (f2) => delta_f is negative
-                frequencies[i] = (Int32)(f1 + i * delta_f);
-            }
-
-            // Ensure the start and end frequencies are exactly f1 and f2
-            frequencies[0] = (Int32)f1;
-            frequencies[N - 1] = (Int32)f2;
-        }
 
         /*
          * When receiving Data from the serial port than this command is executed
@@ -258,6 +216,12 @@ namespace Biosensor_GUI
             }
         }
 
+        // TODO: to get rid of this fcn, do a serialport read right after the Serial.Write
+        // that waits for data to be received (+timeout)
+        // and just do a quick return in the DataReceived() if the readConfigData is true
+        //
+        // OR...
+        // just implement a timeout in the fcn as previously planned
         private bool ConfigSuccess()
         {
             // TODO: implement a timeout in addition to waiting indefinitely for the configSuccess to change
@@ -274,6 +238,8 @@ namespace Biosensor_GUI
 
         private void updateUI(string data)
         {
+            // TODO: separate data processing from plotting (e.g. by using a Data class)
+
             // update log
             //string receiveLog = "Started receiving data...";
             //textBoxLog.AppendText(receiveLog + Environment.NewLine);
@@ -603,289 +569,283 @@ namespace Biosensor_GUI
 
         private void measParamBtn_Click(object sender, EventArgs e)
         {
-            if (serialPort != null && serialPort.IsOpen)
-            {
-                try
-                {
-                    // TODO: check that the values from input fields are within the correct range!
-
-                    readConfigData = true;  // mark that incoming data refers to config cmd return values
-                    string logText = "";
-
-                    // empty the receive buffer
-                    emptyRxBuffer();
-
-                    // start config
-                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
-                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
-
-                    // set voltage
-                    string voltageStr = textBoxConstVoltage.Text;
-                    if (Int32.TryParse(voltageStr, out int voltageInt))
-                    {
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(voltageInt);
-
-                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_STEP }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        logText = "Voltage set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = "Voltage set to " + voltageStr + " mV";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
-                    }
-
-                    // set duration not needed, as waiting is done in GUI, not on the uC
-
-                    // stop config
-                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
-                    logText = "Stop parameter config failed";
-                    if (ConfigSuccess())
-                    {
-                        logText = "Stopped parameter config";
-                    }
-                    textBoxLog.AppendText(logText + Environment.NewLine);
-
-                    readConfigData = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
+            if (serialPort == null || !serialPort.IsOpen)
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                // TODO: check that the values from input fields are within the correct range!
+
+                readConfigData = true;  // mark that incoming data refers to config cmd return values
+                string logText = "";
+
+                // empty the receive buffer
+                serialPort.EmptyRxBuffer();
+
+                // start config
+                serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                // set voltage
+                string voltageStr = textBoxConstVoltage.Text;
+                if (Int32.TryParse(voltageStr, out int voltageInt))
+                {
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(voltageInt);
+
+                    // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_STEP }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    logText = "Voltage set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Voltage set to " + voltageStr + " mV";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
+                }
+
+                // set duration not needed, as waiting is done in GUI, not on the uC
+
+                // stop config
+                serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                logText = "Stop parameter config failed";
+                if (ConfigSuccess())
+                {
+                    logText = "Stopped parameter config";
+                }
+                textBoxLog.AppendText(logText + Environment.NewLine);
+
+                readConfigData = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void cvMeasParamBtn_Click(object sender, EventArgs e)
         {
-            if (serialPort != null && serialPort.IsOpen)
-            {
-                try
-                {
-                    // TODO: check that the values from input fields are within the correct range!
-
-                    readConfigData = true;  // mark that incoming data refers to config cmd return values
-                    string logText = "";
-
-                    // empty the receive buffer
-                    emptyRxBuffer();
-
-                    // start config
-                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
-                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
-
-                    // set voltage level 1
-                    string voltage1Str = textBoxCVVoltage1.Text;
-                    if (Int32.TryParse(voltage1Str, out int voltage1Int))
-                    {
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(voltage1Int);
-
-                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE1_CV }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        logText = "Voltage set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = "Voltage set to " + voltage1Str + " mV";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid voltage 1 integer within the correct range.");
-                    }
-
-                    // set voltage level 2
-                    string voltage2Str = textBoxCVVoltage2.Text;
-                    if (Int32.TryParse(voltage2Str, out int voltage2Int))
-                    {
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(voltage2Int);
-
-                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE2_CV }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        logText = "Voltage set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = "Voltage set to " + voltage2Str + " mV";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid voltage 2 integer within the correct range.");
-                    }
-
-                    // set slope duration
-                    string slopeDurStr = textBoxCVSlopeDur.Text;
-                    if (float.TryParse(slopeDurStr, out float slopeDurFloat))
-                    {
-                        // convert the float representing seconds [s] to int in microseconds [us]
-                        Int32 slopeDurInt = (Int32)(slopeDurFloat*1000000);
-
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(slopeDurInt);
-
-                        // set slope time (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_SLOPE_TIME_CV }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        logText = "Slope duration set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = "Slope duration set to " + slopeDurStr + " s";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid slope duration less than the maximum.");
-                    }
-
-                    // stop config
-                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
-                    logText = "Stop parameter config failed";
-                    if (ConfigSuccess())
-                    {
-                        logText = "Stopped parameter config";
-                    }
-                    textBoxLog.AppendText(logText + Environment.NewLine);
-
-                    readConfigData = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
+            if (serialPort == null || !serialPort.IsOpen)
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                // TODO: check that the values from input fields are within the correct range!
+
+                readConfigData = true;  // mark that incoming data refers to config cmd return values
+                string logText = "";
+
+                // empty the receive buffer
+                serialPort.EmptyRxBuffer();
+
+                // start config
+                serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                // set voltage level 1
+                string voltage1Str = textBoxCVVoltage1.Text;
+                if (Int32.TryParse(voltage1Str, out int voltage1Int))
+                {
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(voltage1Int);
+
+                    // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE1_CV }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    logText = "Voltage set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Voltage set to " + voltage1Str + " mV";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid voltage 1 integer within the correct range.");
+                }
+
+                // set voltage level 2
+                string voltage2Str = textBoxCVVoltage2.Text;
+                if (Int32.TryParse(voltage2Str, out int voltage2Int))
+                {
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(voltage2Int);
+
+                    // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE2_CV }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    logText = "Voltage set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Voltage set to " + voltage2Str + " mV";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid voltage 2 integer within the correct range.");
+                }
+
+                // set slope duration
+                string slopeDurStr = textBoxCVSlopeDur.Text;
+                if (float.TryParse(slopeDurStr, out float slopeDurFloat))
+                {
+                    // convert the float representing seconds [s] to int in microseconds [us]
+                    Int32 slopeDurInt = (Int32)(slopeDurFloat*1000000);
+
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(slopeDurInt);
+
+                    // set slope time (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_SLOPE_TIME_CV }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    logText = "Slope duration set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Slope duration set to " + slopeDurStr + " s";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid slope duration less than the maximum.");
+                }
+
+                // stop config
+                serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                logText = "Stop parameter config failed";
+                if (ConfigSuccess())
+                {
+                    logText = "Stopped parameter config";
+                }
+                textBoxLog.AppendText(logText + Environment.NewLine);
+
+                readConfigData = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void eisMeasParamBtn_Click(object sender, EventArgs e)
         {
-            if (serialPort != null && serialPort.IsOpen)
-            {
-                try
-                {
-                    // TODO: check that the values from input fields are within the correct range!
-
-                    readConfigData = true;  // mark that incoming data refers to config cmd return values
-                    string logText = "";
-
-                    // empty the receive buffer
-                    emptyRxBuffer();
-
-                    // start config
-                    serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
-                    textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
-
-                    // set AC voltage peak
-                    string voltageStr = textBoxEISVoltage.Text;
-                    if (float.TryParse(voltageStr, out float voltageFloat))
-                    {
-                        // convert the float representing milli [mV] to int in microvolts [uV]
-                        Int32 voltageInt = (Int32)(voltageFloat * 1000 + 0.5);
-
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(voltageInt);
-
-                        // set voltage (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_EIS }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        logText = "Voltage set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = "Voltage set to " + voltageStr + " mV";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
-                    }
-
-                    // set number of frequency points and the frequencies distributed between start- and stop-frequency
-                    string startFreqStr = textBoxStartFreqEIS.Text;
-                    string stopFreqStr = textBoxStopFreqEIS.Text;
-                    string freqPointsStr = textBoxPointsEIS.Text;
-                    if (Int32.TryParse(freqPointsStr, out int freqPointsInt) && Int32.TryParse(startFreqStr, out int startFreqInt) && Int32.TryParse(stopFreqStr, out int stopFreqInt))
-                    {
-                        // Convert Int32 to byte array
-                        byte[] intBytes = BitConverter.GetBytes(freqPointsInt);
-
-                        // set frequency (1 byte as cmd ID + 4 bytes for the value)
-                        serialPort.Write(new byte[] { CommandSet.SET_NUM_FREQ_EIS }, 0, 1);
-                        serialPort.Write(intBytes, 0, intBytes.Length);
-
-                        Int32[] frequenciesEIS = new Int32[freqPointsInt];
-                        string logTextLinLog = "";
-                        if (checkBoxLogDistribution.Checked)
-                        {
-                            logTextLinLog = "Logarithmically";
-                            logspace(startFreqInt, stopFreqInt, freqPointsInt, frequenciesEIS);
-                        }
-                        else // linear spacing of frequency range
-                        {
-                            logTextLinLog = "Linearly";
-                            linspace(startFreqInt, stopFreqInt, freqPointsInt, frequenciesEIS);
-                        }
-
-                        // send the frequency points
-                        for (int i = 0; i < freqPointsInt; i++)
-                        {
-                            intBytes = BitConverter.GetBytes(frequenciesEIS[i]);
-                            serialPort.Write(intBytes, 0, intBytes.Length);
-                        }
-
-                        logText = "Frequency points set failed";
-                        if (ConfigSuccess())
-                        {
-                            logText = logTextLinLog + " distributed " + freqPointsStr + " frequency points;" + Environment.NewLine
-                            + "--> range: " + startFreqStr + " - " + stopFreqStr + " Hz";
-                        }
-                        textBoxLog.AppendText(logText + Environment.NewLine);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid input. Please enter integers for start/stop frequencies and the number of frequency points.");
-                    }
-
-                    // stop config
-                    serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
-                    logText = "Stop parameter config failed";
-                    if (ConfigSuccess())
-                    {
-                        logText = "Stopped parameter config";
-                    }
-                    textBoxLog.AppendText(logText + Environment.NewLine);
-
-                    readConfigData = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
+            if (serialPort == null || !serialPort.IsOpen)
             {
                 MessageBox.Show("Serial port is not open.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            try
+            {
+                // TODO: check that the values from input fields are within the correct range!
+
+                readConfigData = true;  // mark that incoming data refers to config cmd return values
+                string logText = "";
+
+                // empty the receive buffer
+                serialPort.EmptyRxBuffer();
+
+                // start config
+                serialPort.Write(new byte[] { CommandSet.START_CONFIG }, 0, 1);
+                textBoxLog.AppendText("Started parameter config" + Environment.NewLine);
+
+                // set AC voltage peak
+                string voltageStr = textBoxEISVoltage.Text;
+                if (float.TryParse(voltageStr, out float voltageFloat))
+                {
+                    // convert the float representing milli [mV] to int in microvolts [uV]
+                    Int32 voltageInt = (Int32)(voltageFloat * 1000 + 0.5);
+
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(voltageInt);
+
+                    // set voltage (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_VOLTAGE_EIS }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    logText = "Voltage set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = "Voltage set to " + voltageStr + " mV";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid voltage integer within the correct range.");
+                }
+
+                // set number of frequency points and the frequencies distributed between start- and stop-frequency
+                string startFreqStr = textBoxStartFreqEIS.Text;
+                string stopFreqStr = textBoxStopFreqEIS.Text;
+                string freqPointsStr = textBoxPointsEIS.Text;
+                if (Int32.TryParse(freqPointsStr, out int freqPointsInt) && Int32.TryParse(startFreqStr, out int startFreqInt) && Int32.TryParse(stopFreqStr, out int stopFreqInt))
+                {
+                    // Convert Int32 to byte array
+                    byte[] intBytes = BitConverter.GetBytes(freqPointsInt);
+
+                    // set frequency (1 byte as cmd ID + 4 bytes for the value)
+                    serialPort.Write(new byte[] { CommandSet.SET_NUM_FREQ_EIS }, 0, 1);
+                    serialPort.Write(intBytes, 0, intBytes.Length);
+
+                    Int32[] frequenciesEIS = new Int32[freqPointsInt];
+                    string logTextLinLog = "";
+                    if (checkBoxLogDistribution.Checked)
+                    {
+                        logTextLinLog = "Logarithmically";
+                        Utils.Logspace(startFreqInt, stopFreqInt, freqPointsInt, frequenciesEIS);
+                    }
+                    else // linear spacing of frequency range
+                    {
+                        logTextLinLog = "Linearly";
+                        Utils.Linspace(startFreqInt, stopFreqInt, freqPointsInt, frequenciesEIS);
+                    }
+
+                    // send the frequency points
+                    for (int i = 0; i < freqPointsInt; i++)
+                    {
+                        intBytes = BitConverter.GetBytes(frequenciesEIS[i]);
+                        serialPort.Write(intBytes, 0, intBytes.Length);
+                    }
+
+                    logText = "Frequency points set failed";
+                    if (ConfigSuccess())
+                    {
+                        logText = logTextLinLog + " distributed " + freqPointsStr + " frequency points;" + Environment.NewLine
+                        + "--> range: " + startFreqStr + " - " + stopFreqStr + " Hz";
+                    }
+                    textBoxLog.AppendText(logText + Environment.NewLine);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter integers for start/stop frequencies and the number of frequency points.");
+                }
+
+                // stop config
+                serialPort.Write(new byte[] { CommandSet.STOP_CONFIG }, 0, 1);
+                logText = "Stop parameter config failed";
+                if (ConfigSuccess())
+                {
+                    logText = "Stopped parameter config";
+                }
+                textBoxLog.AppendText(logText + Environment.NewLine);
+
+                readConfigData = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending a command: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
